@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="#0A2234"
+    android:padding="16dp"
+    android:layout_marginBottom="12dp">
+
+    <TextView
+        android:id="@+id/tvCitaServicio"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Servicio"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tvCitaBarbero"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Barbero"
+        android:textColor="#D0DFE9"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/tvCitaFecha"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:text="Fecha"
+        android:textColor="#D0DFE9"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/tvCitaHora"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:text="Hora"
+        android:textColor="#D0DFE9"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/tvCitaEstado"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Estado"
+        android:textColor="#08B9FF"
+        android:textStyle="bold"
+        android:textSize="14sp" />
+
+    <Button
+        android:id="@+id/btnCancelarCita"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginTop="10dp"
+        android:text="Cancelar cita"
+        android:textAllCaps="false"
+        android:textColor="#FFFFFF"
+        android:backgroundTint="#B83232" />
+
+</LinearLayout>

@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#061B2A"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="22dp">
+
+        <TextView
+            android:id="@+id/tvVolverPerfil"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="‹  Volver"
+            android:textColor="#08B9FF"
+            android:textSize="17sp"
+            android:padding="6dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Mi perfil"
+            android:textColor="#FFFFFF"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:layout_marginTop="12dp" />
+
+        <ImageView
+            android:id="@+id/imgFotoPerfil"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="24dp"
+            android:src="@drawable/logo_barberapp"
+            android:scaleType="centerCrop"
+            android:contentDescription="Foto de perfil" />
+
+        <Button
+            android:id="@+id/btnCambiarFoto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Cambiar foto"
+            android:textColor="#08B9FF"
+            android:backgroundTint="#0A2234"
+            android:layout_marginTop="8dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Datos personales"
+            android:textColor="#08B9FF"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginTop="28dp"
+            android:layout_marginBottom="12dp" />
+
+        <EditText
+            android:id="@+id/etNombrePerfil"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Nombre completo"
+            android:inputType="textPersonName"
+            android:textColor="#FFFFFF"
+            android:textColorHint="#8FA3B2"
+            android:backgroundTint="#08B9FF"
+            android:padding="12dp" />
+
+        <EditText
+            android:id="@+id/etCorreoPerfil"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Correo electrónico"
+            android:inputType="textEmailAddress"
+            android:textColor="#FFFFFF"
+            android:textColorHint="#8FA3B2"
+            android:backgroundTint="#08B9FF"
+            android:padding="12dp"
+            android:layout_marginTop="10dp" />
+
+        <EditText
+            android:id="@+id/etTelefonoPerfil"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Teléfono"
+            android:inputType="phone"
+            android:textColor="#FFFFFF"
+            android:textColorHint="#8FA3B2"
+            android:backgroundTint="#08B9FF"
+            android:padding="12dp"
+            android:layout_marginTop="10dp" />
+
+        <Button
+            android:id="@+id/btnGuardarPerfil"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Guardar cambios"
+            android:textColor="#FFFFFF"
+            android:backgroundTint="#087EAD"
+            android:layout_marginTop="20dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Cambiar contraseña"
+            android:textColor="#08B9FF"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginTop="28dp"
+            android:layout_marginBottom="12dp" />
+
+        <EditText
+            android:id="@+id/etPasswordActual"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Contraseña actual"
+            android:inputType="textPassword"
+            android:textColor="#FFFFFF"
+            android:textColorHint="#8FA3B2"
+            android:backgroundTint="#08B9FF"
+            android:padding="12dp" />
+
+        <EditText
+            android:id="@+id/etPasswordNueva"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Nueva contraseña"
+            android:inputType="textPassword"
+            android:textColor="#FFFFFF"
+            android:textColorHint="#8FA3B2"
+            android:backgroundTint="#08B9FF"
+            android:padding="12dp"
+            android:layout_marginTop="10dp" />
+
+        <EditText
+            android:id="@+id/etPasswordConfirmar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Confirmar nueva contraseña"
+            android:inputType="textPassword"
+            android:textColor="#FFFFFF"
+            android:textColorHint="#8FA3B2"
+            android:backgroundTint="#08B9FF"
+            android:padding="12dp"
+            android:layout_marginTop="10dp" />
+
+        <Button
+            android:id="@+id/btnCambiarPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Actualizar contraseña"
+            android:textColor="#FFFFFF"
+            android:backgroundTint="#087EAD"
+            android:layout_marginTop="16dp" />
+
+        <TextView
+            android:id="@+id/tvEstadoPerfil"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp"
+            android:gravity="center"
+            android:layout_marginTop="18dp"
+            android:layout_marginBottom="20dp" />
+
+    </LinearLayout>
+</ScrollView>
