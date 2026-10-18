@@ -72,12 +72,7 @@ class HomeActivity : AppCompatActivity() {
         findViewById<View>(R.id.cardReservar).setOnClickListener { abrirPantalla(ReservarCitaActivity::class.java) }
         findViewById<View>(R.id.cardMisCitas).setOnClickListener { abrirPantalla(MisCitasActivity::class.java) }
 
-        // BARRA INFERIOR
-        findViewById<View>(R.id.navInicio).setOnClickListener {}
-        findViewById<View>(R.id.navServicios).setOnClickListener { abrirPantalla(ServiciosActivity::class.java) }
-        findViewById<View>(R.id.navBarberos).setOnClickListener { abrirPantalla(BarberosActivity::class.java) }
-        findViewById<View>(R.id.navCitas).setOnClickListener { abrirPantalla(MisCitasActivity::class.java) }
-        findViewById<View>(R.id.navPerfil).setOnClickListener { abrirPantalla(PerfilActivity::class.java) }
+
 
         // CERRAR SESIÓN
         findViewById<TextView>(R.id.tvBack).setOnClickListener { cerrarSesion() }

@@ -1,10 +1,9 @@
-
 package pe.edu.cibertec.app_barberia.citas
 
 import android.app.DatePickerDialog
-import android.app.TimePickerDialog
 import android.os.Bundle
 import android.view.View
+import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.ProgressBar
@@ -39,6 +38,10 @@ class ReservarCitaActivity : AppCompatActivity() {
     private var fechaSeleccionada = ""
     private val calendario = Calendar.getInstance()
 
+    private val colorTexto = android.graphics.Color.parseColor("#0A2234")
+    private val colorFondoOpciones =
+        android.graphics.Color.parseColor("#E3EFF8")
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_reservar_cita)
@@ -70,6 +73,57 @@ class ReservarCitaActivity : AppCompatActivity() {
         cargarBarberos()
     }
 
+    private fun crearAdaptador(opciones: List<String>): ArrayAdapter<String> {
+        return object : ArrayAdapter<String>(
+            this,
+            android.R.layout.simple_spinner_item,
+            opciones
+        ) {
+            override fun getView(
+                position: Int,
+                convertView: View?,
+                parent: ViewGroup
+            ): View {
+                val vista = super.getView(
+                    position,
+                    convertView,
+                    parent
+                ) as TextView
+
+                vista.setTextColor(colorTexto)
+                vista.textSize = 14f
+                vista.setPadding(14, 0, 38, 0)
+                vista.maxLines = 1
+
+                return vista
+            }
+
+            override fun getDropDownView(
+                position: Int,
+                convertView: View?,
+                parent: ViewGroup
+            ): View {
+                val vista = super.getDropDownView(
+                    position,
+                    convertView,
+                    parent
+                ) as TextView
+
+                vista.setTextColor(colorTexto)
+                vista.setBackgroundColor(colorFondoOpciones)
+                vista.textSize = 14f
+                vista.setPadding(20, 14, 20, 14)
+                vista.maxLines = 1
+
+                return vista
+            }
+        }.also {
+            it.setDropDownViewResource(
+                android.R.layout.simple_spinner_dropdown_item
+            )
+        }
+    }
+
     private fun configurarHoras() {
         val horas = listOf(
             "09:00", "10:00", "11:00", "12:00",
@@ -77,17 +131,7 @@ class ReservarCitaActivity : AppCompatActivity() {
             "17:00", "18:00"
         )
 
-        val adapter = ArrayAdapter(
-            this,
-            android.R.layout.simple_spinner_item,
-            horas
-        )
-
-        adapter.setDropDownViewResource(
-            android.R.layout.simple_spinner_dropdown_item
-        )
-
-        spHora.adapter = adapter
+        spHora.adapter = crearAdaptador(horas)
     }
 
     private fun seleccionarFecha() {
@@ -96,7 +140,10 @@ class ReservarCitaActivity : AppCompatActivity() {
         val dialogo = DatePickerDialog(
             this,
             { _, anio, mes, dia ->
-                calendario.set(anio, mes, dia)
+                calendario.set(
+                    anio, mes, dia, 0, 0, 0
+                )
+                calendario.set(Calendar.MILLISECOND, 0)
 
                 fechaSeleccionada = String.format(
                     Locale.US,
@@ -133,26 +180,23 @@ class ReservarCitaActivity : AppCompatActivity() {
                 ) {
                     if (response.isSuccessful) {
                         servicios.clear()
-                        servicios.addAll(response.body() ?: emptyList())
+                        servicios.addAll(
+                            response.body() ?: emptyList()
+                        )
 
                         val nombres = servicios.map {
-                            it.obtenerTexto("nombre", "Nombre", "nombreServicio")
-                                ?: "Servicio"
+                            it.obtenerTexto(
+                                "nombre",
+                                "Nombre",
+                                "nombreServicio"
+                            ) ?: "Servicio"
                         }
 
-                        val adapter = ArrayAdapter(
-                            this@ReservarCitaActivity,
-                            android.R.layout.simple_spinner_item,
-                            nombres
-                        )
-
-                        adapter.setDropDownViewResource(
-                            android.R.layout.simple_spinner_dropdown_item
-                        )
-
-                        spServicio.adapter = adapter
+                        spServicio.adapter = crearAdaptador(nombres)
                     } else {
-                        mostrarMensaje("No se pudieron cargar los servicios")
+                        mostrarMensaje(
+                            "No se pudieron cargar los servicios"
+                        )
                     }
                 }
 
@@ -160,7 +204,9 @@ class ReservarCitaActivity : AppCompatActivity() {
                     call: Call<List<JsonObject>>,
                     t: Throwable
                 ) {
-                    mostrarMensaje("Error al conectar con los servicios")
+                    mostrarMensaje(
+                        "Error al conectar con los servicios"
+                    )
                 }
             })
     }
@@ -175,26 +221,22 @@ class ReservarCitaActivity : AppCompatActivity() {
                 ) {
                     if (response.isSuccessful) {
                         barberos.clear()
-                        barberos.addAll(response.body() ?: emptyList())
+                        barberos.addAll(
+                            response.body() ?: emptyList()
+                        )
 
                         val nombres = barberos.map {
-                            it.obtenerTexto("nombre", "nombreBarbero")
-                                ?: "Barbero"
+                            it.obtenerTexto(
+                                "nombre",
+                                "nombreBarbero"
+                            ) ?: "Barbero"
                         }
 
-                        val adapter = ArrayAdapter(
-                            this@ReservarCitaActivity,
-                            android.R.layout.simple_spinner_item,
-                            nombres
-                        )
-
-                        adapter.setDropDownViewResource(
-                            android.R.layout.simple_spinner_dropdown_item
-                        )
-
-                        spBarbero.adapter = adapter
+                        spBarbero.adapter = crearAdaptador(nombres)
                     } else {
-                        mostrarMensaje("No se pudieron cargar los barberos")
+                        mostrarMensaje(
+                            "No se pudieron cargar los barberos"
+                        )
                     }
                 }
 
@@ -202,13 +244,19 @@ class ReservarCitaActivity : AppCompatActivity() {
                     call: Call<List<JsonObject>>,
                     t: Throwable
                 ) {
-                    mostrarMensaje("Error al conectar con los barberos")
+                    mostrarMensaje(
+                        "Error al conectar con los barberos"
+                    )
                 }
             })
     }
 
     private fun registrarCita() {
-        val preferencias = getSharedPreferences("BarberApp", MODE_PRIVATE)
+        val preferencias = getSharedPreferences(
+            "BarberApp",
+            MODE_PRIVATE
+        )
+
         val idUsuario = preferencias.getInt("idUsuario", -1)
 
         if (idUsuario <= 0) {
@@ -222,12 +270,25 @@ class ReservarCitaActivity : AppCompatActivity() {
         }
 
         if (servicios.isEmpty() || barberos.isEmpty()) {
-            mostrarMensaje("Espera a que carguen los servicios y barberos")
+            mostrarMensaje(
+                "Espera a que carguen los servicios y barberos"
+            )
             return
         }
 
-        val servicio = servicios[spServicio.selectedItemPosition]
-        val barbero = barberos[spBarbero.selectedItemPosition]
+        val servicio = servicios.getOrNull(
+            spServicio.selectedItemPosition
+        )
+        val barbero = barberos.getOrNull(
+            spBarbero.selectedItemPosition
+        )
+
+        if (servicio == null || barbero == null) {
+            mostrarMensaje(
+                "Selecciona un servicio y un barbero"
+            )
+            return
+        }
 
         val idServicio = servicio.obtenerEntero(
             "idServicio", "id_servicio", "id"
@@ -238,11 +299,13 @@ class ReservarCitaActivity : AppCompatActivity() {
         )
 
         if (idServicio == null || idBarbero == null) {
-            mostrarMensaje("No se pudieron identificar el servicio o barbero")
+            mostrarMensaje(
+                "No se pudieron identificar el servicio o barbero"
+            )
             return
         }
 
-        val hora = spHora.selectedItem.toString()
+        val hora = spHora.selectedItem?.toString() ?: ""
 
         val solicitud = JsonObject().apply {
             addProperty("idUsuario", idUsuario)
@@ -272,7 +335,6 @@ class ReservarCitaActivity : AppCompatActivity() {
                             "¡Cita reservada correctamente!"
 
                         mostrarMensaje("Reserva registrada")
-
                         setResult(RESULT_OK)
                         finish()
                     } else {
@@ -284,7 +346,9 @@ class ReservarCitaActivity : AppCompatActivity() {
                         }
 
                         tvEstadoReserva.text = mensaje
-                        mostrarMensaje("No se pudo reservar la cita")
+                        mostrarMensaje(
+                            "No se pudo reservar la cita"
+                        )
                     }
                 }
 
@@ -298,21 +362,31 @@ class ReservarCitaActivity : AppCompatActivity() {
                     tvEstadoReserva.text =
                         "No se pudo conectar con el servidor"
 
-                    mostrarMensaje("Verifica que Spring Boot esté ejecutándose")
+                    mostrarMensaje(
+                        "Verifica que Spring Boot esté ejecutándose"
+                    )
                 }
             })
     }
 
-    private fun JsonObject.obtenerTexto(vararg claves: String): String? {
+    private fun JsonObject.obtenerTexto(
+        vararg claves: String
+    ): String? {
         for (clave in claves) {
             if (has(clave) && !get(clave).isJsonNull) {
-                return get(clave).asString
+                return try {
+                    get(clave).asString
+                } catch (_: Exception) {
+                    null
+                }
             }
         }
         return null
     }
 
-    private fun JsonObject.obtenerEntero(vararg claves: String): Int? {
+    private fun JsonObject.obtenerEntero(
+        vararg claves: String
+    ): Int? {
         for (clave in claves) {
             if (has(clave) && !get(clave).isJsonNull) {
                 return try {
@@ -326,6 +400,10 @@ class ReservarCitaActivity : AppCompatActivity() {
     }
 
     private fun mostrarMensaje(mensaje: String) {
-        Toast.makeText(this, mensaje, Toast.LENGTH_LONG).show()
+        Toast.makeText(
+            this,
+            mensaje,
+            Toast.LENGTH_LONG
+        ).show()
     }
 }

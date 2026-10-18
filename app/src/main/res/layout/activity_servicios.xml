@@ -164,4 +164,15 @@
         </LinearLayout>
     </ScrollView>
 
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/bottomNavContainer"
+        android:name="pe.edu.cibertec.app_barberia.navegacion.BottomNavFragment"
+        android:layout_width="0dp"
+        android:layout_height="78dp"
+        android:elevation="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

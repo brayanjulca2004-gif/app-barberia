@@ -9,6 +9,7 @@
     android:background="#061B2A"
     tools:context=".home.HomeActivity">
 
+    <!-- BARRA SUPERIOR -->
     <View
         android:id="@+id/topBar"
         android:layout_width="0dp"
@@ -51,6 +52,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
+    <!-- CONTENIDO DESPLAZABLE -->
     <ScrollView
         android:id="@+id/scrollHome"
         android:layout_width="0dp"
@@ -58,7 +60,7 @@
         android:fillViewport="true"
         android:scrollbars="none"
         app:layout_constraintTop_toBottomOf="@id/topBar"
-        app:layout_constraintBottom_toTopOf="@id/bottomBar"
+        app:layout_constraintBottom_toTopOf="@id/bottomNavContainer"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
@@ -71,81 +73,80 @@
             android:paddingTop="22dp"
             android:paddingBottom="28dp">
 
-        <!-- PANEL: TU ESPACIO PERSONAL CON AVATAR CIRCULAR -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/bg_panel_login"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:padding="20dp">
-
-            <!-- Saludo a la izquierda -->
+            <!-- PANEL PERSONAL -->
             <LinearLayout
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical">
+                android:background="@drawable/bg_panel_login"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:padding="20dp">
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="TU ESPACIO PERSONAL"
-                    android:textColor="#08B9FF"
-                    android:textSize="11sp"
-                    android:textStyle="bold"
-                    android:letterSpacing="0.10" />
+                    android:layout_weight="1"
+                    android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/tvSaludo"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:text="Hola, Usuario"
-                    android:textColor="#FFFFFF"
-                    android:textSize="23sp"
-                    android:textStyle="bold" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="TU ESPACIO PERSONAL"
+                        android:textColor="#08B9FF"
+                        android:textSize="11sp"
+                        android:textStyle="bold"
+                        android:letterSpacing="0.10" />
 
-                <TextView
-                    android:id="@+id/tvPregunta"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:text="¿Qué deseas hacer hoy?"
-                    android:textColor="#AFC6D8"
-                    android:textSize="14sp" />
-            </LinearLayout>
+                    <TextView
+                        android:id="@+id/tvSaludo"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="Hola, Usuario"
+                        android:textColor="#FFFFFF"
+                        android:textSize="23sp"
+                        android:textStyle="bold" />
 
-            <!-- Avatar circular más grande -->
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cardHomeAvatar"
-                android:layout_width="84dp"
-                android:layout_height="84dp"
-                android:layout_marginStart="14dp"
-                android:clickable="true"
-                android:focusable="true"
-                app:cardCornerRadius="42dp"
-                app:cardBackgroundColor="#08B9FF"
-                app:cardElevation="6dp">
+                    <TextView
+                        android:id="@+id/tvPregunta"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:text="¿Qué deseas hacer hoy?"
+                        android:textColor="#AFC6D8"
+                        android:textSize="14sp" />
+                </LinearLayout>
 
                 <androidx.cardview.widget.CardView
-                    android:layout_width="78dp"
-                    android:layout_height="78dp"
-                    android:layout_gravity="center"
-                    app:cardCornerRadius="39dp"
-                    app:cardBackgroundColor="#061B2A">
+                    android:id="@+id/cardHomeAvatar"
+                    android:layout_width="84dp"
+                    android:layout_height="84dp"
+                    android:layout_marginStart="14dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    app:cardCornerRadius="42dp"
+                    app:cardBackgroundColor="#08B9FF"
+                    app:cardElevation="6dp">
 
-                    <ImageView
-                        android:id="@+id/ivHomeFotoPerfil"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:scaleType="centerCrop"
-                        android:src="@android:drawable/ic_menu_myplaces"
-                        android:contentDescription="Foto de perfil" />
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="78dp"
+                        android:layout_height="78dp"
+                        android:layout_gravity="center"
+                        app:cardCornerRadius="39dp"
+                        app:cardBackgroundColor="#061B2A">
+
+                        <ImageView
+                            android:id="@+id/ivHomeFotoPerfil"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:scaleType="centerCrop"
+                            android:src="@android:drawable/ic_menu_myplaces"
+                            android:contentDescription="Foto de perfil" />
+                    </androidx.cardview.widget.CardView>
                 </androidx.cardview.widget.CardView>
-            </androidx.cardview.widget.CardView>
             </LinearLayout>
 
+            <!-- EXPLORAR BARBERAPP -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -163,6 +164,7 @@
                 android:textColor="#AFC6D8"
                 android:textSize="13sp" />
 
+            <!-- TARJETAS: SERVICIOS Y BARBEROS -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -207,7 +209,6 @@
                         android:textColor="#557589"
                         android:textSize="11sp"
                         android:gravity="center" />
-
                 </LinearLayout>
 
                 <LinearLayout
@@ -247,10 +248,10 @@
                         android:textColor="#557589"
                         android:textSize="11sp"
                         android:gravity="center" />
-
                 </LinearLayout>
             </LinearLayout>
 
+            <!-- TARJETAS: RESERVAR Y MIS CITAS -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -294,7 +295,6 @@
                         android:textColor="#557589"
                         android:textSize="11sp"
                         android:gravity="center" />
-
                 </LinearLayout>
 
                 <LinearLayout
@@ -314,6 +314,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="0dp"
                         android:text="⏳"
                         android:textSize="37sp" />
 
@@ -334,10 +335,10 @@
                         android:textColor="#557589"
                         android:textSize="11sp"
                         android:gravity="center" />
-
                 </LinearLayout>
             </LinearLayout>
 
+            <!-- PRÓXIMAS CITAS -->
             <TextView
                 android:id="@+id/tvProximaCita"
                 android:layout_width="match_parent"
@@ -382,143 +383,15 @@
         </LinearLayout>
     </ScrollView>
 
-    <LinearLayout
-        android:id="@+id/bottomBar"
+    <!-- BARRA INFERIOR REUTILIZABLE -->
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/bottomNavContainer"
+        android:name="pe.edu.cibertec.app_barberia.navegacion.BottomNavFragment"
         android:layout_width="0dp"
         android:layout_height="78dp"
-        android:background="#0A2234"
         android:elevation="8dp"
-        android:orientation="horizontal"
-        android:paddingTop="6dp"
-        android:paddingBottom="5dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-
-        <LinearLayout
-            android:id="@+id/navInicio"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:clickable="true"
-            android:focusable="true">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="⌂"
-                android:textColor="#08B9FF"
-                android:textSize="28sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Inicio"
-                android:textColor="#08B9FF"
-                android:textSize="11sp"
-                android:textStyle="bold" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/navServicios"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:clickable="true"
-            android:focusable="true">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="✂"
-                android:textColor="#AFC6D8"
-                android:textSize="24sp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Servicios"
-                android:textColor="#AFC6D8"
-                android:textSize="11sp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/navBarberos"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:clickable="true"
-            android:focusable="true">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="💈"
-                android:textSize="23sp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Barberos"
-                android:textColor="#AFC6D8"
-                android:textSize="11sp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/navCitas"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:clickable="true"
-            android:focusable="true">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="📅"
-                android:textSize="23sp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Citas"
-                android:textColor="#AFC6D8"
-                android:textSize="11sp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/navPerfil"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:clickable="true"
-            android:focusable="true">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="👤"
-                android:textSize="23sp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Perfil"
-                android:textColor="#AFC6D8"
-                android:textSize="11sp" />
-        </LinearLayout>
-
-    </LinearLayout>
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
