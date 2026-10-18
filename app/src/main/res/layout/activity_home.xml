@@ -47,7 +47,9 @@
         android:id="@+id/tvBack"
         android:layout_width="1dp"
         android:layout_height="1dp"
-        android:visibility="gone" />
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <ScrollView
         android:id="@+id/scrollHome"
@@ -69,12 +71,21 @@
             android:paddingTop="22dp"
             android:paddingBottom="28dp">
 
+        <!-- PANEL: TU ESPACIO PERSONAL CON AVATAR CIRCULAR -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_panel_login"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:padding="20dp">
+
+            <!-- Saludo a la izquierda -->
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:background="@drawable/bg_panel_login"
-                android:orientation="vertical"
-                android:padding="20dp">
+                android:layout_weight="1"
+                android:orientation="vertical">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -89,21 +100,50 @@
                     android:id="@+id/tvSaludo"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="8dp"
                     android:text="Hola, Usuario"
                     android:textColor="#FFFFFF"
-                    android:textSize="25sp"
+                    android:textSize="23sp"
                     android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/tvPregunta"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="7dp"
+                    android:layout_marginTop="5dp"
                     android:text="¿Qué deseas hacer hoy?"
                     android:textColor="#AFC6D8"
-                    android:textSize="15sp" />
+                    android:textSize="14sp" />
+            </LinearLayout>
 
+            <!-- Avatar circular más grande -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardHomeAvatar"
+                android:layout_width="84dp"
+                android:layout_height="84dp"
+                android:layout_marginStart="14dp"
+                android:clickable="true"
+                android:focusable="true"
+                app:cardCornerRadius="42dp"
+                app:cardBackgroundColor="#08B9FF"
+                app:cardElevation="6dp">
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="78dp"
+                    android:layout_height="78dp"
+                    android:layout_gravity="center"
+                    app:cardCornerRadius="39dp"
+                    app:cardBackgroundColor="#061B2A">
+
+                    <ImageView
+                        android:id="@+id/ivHomeFotoPerfil"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerCrop"
+                        android:src="@android:drawable/ic_menu_myplaces"
+                        android:contentDescription="Foto de perfil" />
+                </androidx.cardview.widget.CardView>
+            </androidx.cardview.widget.CardView>
             </LinearLayout>
 
             <TextView
