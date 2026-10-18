@@ -4,83 +4,107 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="10dp"
-    app:cardBackgroundColor="#FFFFFF"
-    app:cardCornerRadius="14dp"
+    android:layout_marginBottom="14dp"
+    app:cardBackgroundColor="#0A2234"
+    app:cardCornerRadius="18dp"
     app:cardElevation="2dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:padding="12dp">
-
-        <ImageView
-            android:layout_width="52dp"
-            android:layout_height="52dp"
-            android:contentDescription="Logo BarberApp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/logo_barberapp" />
+        android:orientation="vertical"
+        android:padding="16dp">
 
         <LinearLayout
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
-            android:layout_weight="1"
-            android:orientation="vertical">
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/tvServicioProxima"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Corte clásico"
-                android:textColor="#17344B"
-                android:textSize="15sp"
-                android:textStyle="bold" />
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/logo_barberapp"
+                android:scaleType="fitCenter"
+                android:contentDescription="Logo BarberApp" />
 
-            <TextView
-                android:id="@+id/tvBarberoProxima"
-                android:layout_width="match_parent"
+            <LinearLayout
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="3dp"
-                android:text="Barbero: Carlos Ramírez"
-                android:textColor="#587087"
-                android:textSize="13sp" />
+                android:layout_weight="1"
+                android:layout_marginStart="14dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvServicioProxima"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Servicio reservado"
+                    android:textColor="#FFFFFF"
+                    android:textSize="17sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvBarberoProxima"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="Barbero asignado"
+                    android:textColor="#AFC6D8"
+                    android:textSize="13sp" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="14dp"
+            android:background="#1D4C66" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/tvFechaProxima"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:text="Hoy · 17:00"
-                android:textColor="#176B9F"
-                android:textSize="13sp"
+                android:layout_weight="1"
+                android:text="Fecha y hora"
+                android:textColor="#08B9FF"
+                android:textSize="14sp"
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/tvRestanteProxima"
-                android:layout_width="match_parent"
+                android:id="@+id/tvEstadoProxima"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                android:text="Faltan 30 minutos"
-                android:textColor="#587087"
-                android:textSize="12sp" />
+                android:layout_marginStart="8dp"
+                android:background="@drawable/card_home"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:paddingTop="7dp"
+                android:paddingBottom="7dp"
+                android:text="PENDIENTE"
+                android:textColor="#17344B"
+                android:textSize="11sp"
+                android:textStyle="bold" />
 
         </LinearLayout>
 
         <TextView
-            android:id="@+id/tvEstadoProxima"
-            android:layout_width="wrap_content"
+            android:id="@+id/tvRestanteProxima"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="6dp"
-            android:background="@drawable/card_home"
-            android:paddingHorizontal="7dp"
-            android:paddingVertical="5dp"
-            android:text="PENDIENTE"
-            android:textColor="#17344B"
-            android:textSize="10sp"
-            android:textStyle="bold" />
+            android:layout_marginTop="10dp"
+            android:text="Tiempo restante para tu cita"
+            android:textColor="#AFC6D8"
+            android:textSize="13sp" />
 
     </LinearLayout>
 

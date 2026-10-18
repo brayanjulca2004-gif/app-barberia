@@ -1,66 +1,89 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginBottom="14dp"
+    android:background="@drawable/bg_panel_login"
     android:orientation="vertical"
-    android:background="#0A2234"
-    android:padding="16dp"
-    android:layout_marginBottom="12dp">
+    android:padding="18dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="DETALLES DE LA CITA"
+        android:textColor="#08B9FF"
+        android:textSize="11sp"
+        android:textStyle="bold"
+        android:letterSpacing="0.10" />
 
     <TextView
         android:id="@+id/tvCitaServicio"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:text="Servicio"
         android:textColor="#FFFFFF"
-        android:textSize="18sp"
+        android:textSize="19sp"
         android:textStyle="bold" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="14dp"
+        android:layout_marginBottom="12dp"
+        android:background="#1D4C66" />
 
     <TextView
         android:id="@+id/tvCitaBarbero"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
         android:text="Barbero"
         android:textColor="#D0DFE9"
-        android:textSize="15sp" />
+        android:textSize="14sp" />
 
     <TextView
         android:id="@+id/tvCitaFecha"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="6dp"
+        android:layout_marginTop="10dp"
         android:text="Fecha"
         android:textColor="#D0DFE9"
-        android:textSize="15sp" />
+        android:textSize="14sp" />
 
     <TextView
         android:id="@+id/tvCitaHora"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="6dp"
+        android:layout_marginTop="10dp"
         android:text="Hora"
         android:textColor="#D0DFE9"
-        android:textSize="15sp" />
+        android:textSize="14sp" />
 
     <TextView
         android:id="@+id/tvCitaEstado"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:text="Estado"
         android:textColor="#08B9FF"
-        android:textStyle="bold"
-        android:textSize="14sp" />
+        android:textSize="14sp"
+        android:textStyle="bold" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btnCancelarCita"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:layout_marginTop="10dp"
+        android:layout_height="52dp"
+        android:layout_marginTop="18dp"
         android:text="Cancelar cita"
         android:textAllCaps="false"
-        android:textColor="#FFFFFF"
-        android:backgroundTint="#B83232" />
+        android:textColor="#FFD0D0"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        app:backgroundTint="#3B2732"
+        app:strokeColor="#EA8D95"
+        app:strokeWidth="1dp"
+        app:cornerRadius="16dp" />
 
 </LinearLayout>

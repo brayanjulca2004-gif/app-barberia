@@ -1,149 +1,228 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#061C2B"
+    android:background="#061B2A"
     android:fillViewport="true"
-    android:fitsSystemWindows="true">
+    android:fitsSystemWindows="true"
+    android:scrollbars="none"
+    tools:context=".login.RegistroActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:gravity="center_horizontal"
-        android:paddingStart="28dp"
-        android:paddingEnd="28dp"
-        android:paddingTop="32dp"
-        android:paddingBottom="28dp">
+        android:gravity="center"
+        android:paddingStart="24dp"
+        android:paddingEnd="24dp"
+        android:paddingTop="30dp"
+        android:paddingBottom="30dp">
 
         <ImageView
             android:id="@+id/ivLogoRegistro"
-            android:layout_width="124dp"
-            android:layout_height="120dp"
-            android:contentDescription="Logo BarberApp"
+            android:layout_width="96dp"
+            android:layout_height="96dp"
+            android:src="@drawable/logo_barberapp"
             android:scaleType="fitCenter"
-            android:src="@drawable/logo_barberapp" />
+            android:contentDescription="Logo BarberApp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:letterSpacing="0.04"
+            android:layout_marginTop="8dp"
             android:text="BARBERAPP"
             android:textColor="#FFFFFF"
-            android:textSize="28sp"
-            android:textStyle="bold" />
+            android:textSize="27sp"
+            android:textStyle="bold"
+            android:letterSpacing="0.10" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="28dp"
-            android:text="Crear Nueva cuenta"
-            android:textColor="#FFFFFF"
-            android:textSize="25sp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Únete a BarberApp"
+            android:layout_marginTop="5dp"
+            android:text="Tu estilo, nuestra prioridad"
             android:textColor="#AFC6D8"
-            android:textSize="14sp"
-            android:layout_marginTop="6dp"
-            android:layout_marginBottom="26dp" />
+            android:textSize="13sp" />
 
-        <EditText
-            android:id="@+id/etNombreRegistro"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="54dp"
-            android:hint="Nombre completo"
-            android:singleLine="true"
-            android:inputType="textPersonName|textCapWords"
-            android:textColor="#FFFFFF"
-            android:textColorHint="#AFC6D8"
-            android:textSize="15sp"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            android:background="@drawable/bg_registro_input"
-            android:layout_marginBottom="14dp" />
-
-        <EditText
-            android:id="@+id/etTelefonoRegistro"
-            android:layout_width="match_parent"
-            android:layout_height="54dp"
-            android:layout_marginBottom="24dp"
-            android:background="@drawable/bg_registro_input"
-            android:hint="Número de teléfono"
-            android:inputType="phone"
-            android:maxLength="9"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            android:singleLine="true"
-            android:textColor="#FFFFFF"
-            android:textColorHint="#AFC6D8"
-            android:textSize="15sp" />
-
-        <EditText
-            android:id="@+id/etCorreoRegistro"
-            android:layout_width="match_parent"
-            android:layout_height="54dp"
-            android:hint="Correo electrónico"
-            android:singleLine="true"
-            android:inputType="textEmailAddress"
-            android:textColor="#FFFFFF"
-            android:textColorHint="#AFC6D8"
-            android:textSize="15sp"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            android:background="@drawable/bg_registro_input"
-            android:layout_marginBottom="14dp" />
-
-        <EditText
-            android:id="@+id/etPasswordRegistro"
-            android:layout_width="match_parent"
-            android:layout_height="54dp"
-            android:layout_marginBottom="14dp"
-            android:background="@drawable/bg_registro_input"
-            android:hint="Contraseña"
-            android:inputType="textPassword"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            android:singleLine="true"
-            android:textColor="#FFFFFF"
-            android:textColorHint="#AFC6D8"
-            android:textSize="15sp" />
-
-        <Button
-            android:id="@+id/btnRegistrar"
-            android:layout_width="match_parent"
-            android:layout_height="54dp"
-            android:text="Crear cuenta"
-            android:textAllCaps="false"
-            android:textColor="#FFFFFF"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:background="@drawable/bg_boton_registro"
-            android:stateListAnimator="@null" />
-
-        <TextView
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="¿Ya tienes cuenta?"
-            android:textColor="#FFFFFF"
-            android:textSize="14sp"
-            android:layout_marginTop="24dp" />
+            android:layout_marginTop="25dp"
+            android:orientation="vertical"
+            android:padding="22dp"
+            android:background="@drawable/bg_panel_login">
 
-        <TextView
-            android:id="@+id/tvVolverLogin"
-            android:layout_width="wrap_content"
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Crea tu cuenta"
+                android:textColor="#FFFFFF"
+                android:textSize="23sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:text="Completa tus datos para comenzar."
+                android:textColor="#AFC6D8"
+                android:textSize="14sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="22dp"
+                android:text="NOMBRE COMPLETO"
+                android:textColor="#AFC6D8"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:labelFor="@id/etNombreRegistro" />
+
+            <EditText
+                android:id="@+id/etNombreRegistro"
+                android:layout_width="match_parent"
+                android:layout_height="54dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/bg_registro_input"
+                android:hint="Ingresa tu nombre completo"
+                android:inputType="textPersonName|textCapWords"
+                android:imeOptions="actionNext"
+                android:maxLines="1"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:textColor="#FFFFFF"
+                android:textColorHint="#819CAF"
+                android:textSize="15sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="17dp"
+                android:text="NÚMERO DE TELÉFONO"
+                android:textColor="#AFC6D8"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:labelFor="@id/etTelefonoRegistro" />
+
+            <EditText
+                android:id="@+id/etTelefonoRegistro"
+                android:layout_width="match_parent"
+                android:layout_height="54dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/bg_registro_input"
+                android:hint="Ingresa tu teléfono"
+                android:inputType="phone"
+                android:imeOptions="actionNext"
+                android:maxLength="9"
+                android:maxLines="1"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:textColor="#FFFFFF"
+                android:textColorHint="#819CAF"
+                android:textSize="15sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="17dp"
+                android:text="CORREO ELECTRÓNICO"
+                android:textColor="#AFC6D8"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:labelFor="@id/etCorreoRegistro" />
+
+            <EditText
+                android:id="@+id/etCorreoRegistro"
+                android:layout_width="match_parent"
+                android:layout_height="54dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/bg_registro_input"
+                android:hint="Ingresa tu correo"
+                android:inputType="textEmailAddress"
+                android:imeOptions="actionNext"
+                android:autofillHints="emailAddress"
+                android:maxLines="1"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:textColor="#FFFFFF"
+                android:textColorHint="#819CAF"
+                android:textSize="15sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="17dp"
+                android:text="CONTRASEÑA"
+                android:textColor="#AFC6D8"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:labelFor="@id/etPasswordRegistro" />
+
+            <EditText
+                android:id="@+id/etPasswordRegistro"
+                android:layout_width="match_parent"
+                android:layout_height="54dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/bg_registro_input"
+                android:hint="Crea una contraseña"
+                android:inputType="textPassword"
+                android:imeOptions="actionDone"
+                android:autofillHints="newPassword"
+                android:maxLines="1"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:textColor="#FFFFFF"
+                android:textColorHint="#819CAF"
+                android:textSize="15sp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnRegistrar"
+                android:layout_width="match_parent"
+                android:layout_height="54dp"
+                android:layout_marginTop="27dp"
+                android:text="Crear cuenta"
+                android:textAllCaps="false"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:backgroundTint="#1599E8"
+                app:cornerRadius="18dp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Iniciar sesión"
-            android:textColor="#08B9FF"
-            android:textSize="15sp"
-            android:textStyle="bold"
-            android:padding="10dp"
-            android:clickable="true"
-            android:focusable="true" />
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="¿Ya tienes una cuenta?"
+                android:textColor="#AFC6D8"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/tvVolverLogin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minHeight="48dp"
+                android:gravity="center"
+                android:paddingStart="10dp"
+                android:paddingEnd="8dp"
+                android:text="Inicia sesión"
+                android:textColor="#08B9FF"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:clickable="true"
+                android:focusable="true" />
+
+        </LinearLayout>
 
     </LinearLayout>
 

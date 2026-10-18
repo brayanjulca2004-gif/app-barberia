@@ -2,41 +2,51 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#061B2A">
+    android:background="#061B2A"
+    tools:context=".servicios.ServiciosActivity">
 
     <LinearLayout
         android:id="@+id/topBar"
         android:layout_width="0dp"
-        android:layout_height="56dp"
+        android:layout_height="60dp"
         android:background="#082536"
         android:gravity="center_vertical"
         android:orientation="horizontal"
+        android:paddingStart="12dp"
+        android:paddingEnd="20dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
         <TextView
             android:id="@+id/tvBackServicios"
-            android:layout_width="52dp"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:text="‹"
-            android:textColor="#FFFFFF"
-            android:textSize="40sp"
+            android:minWidth="70dp"
+            android:paddingEnd="12dp"
+            android:text="‹  Volver"
+            android:textColor="#08B9FF"
+            android:textSize="16sp"
             android:clickable="true"
             android:focusable="true"
-            android:contentDescription="Volver" />
+            android:contentDescription="Volver al inicio" />
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="end"
             android:text="BARBERAPP"
             android:textColor="#FFFFFF"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+            android:textSize="17sp"
+            android:textStyle="bold"
+            android:letterSpacing="0.06" />
+
     </LinearLayout>
 
     <ScrollView
@@ -53,23 +63,63 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="20dp">
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
+            android:paddingTop="24dp"
+            android:paddingBottom="32dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_panel_login"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="SERVICIOS"
+                    android:textColor="#08B9FF"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    android:letterSpacing="0.10" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="Nuestros servicios"
+                    android:textColor="#FFFFFF"
+                    android:textSize="26sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="Descubre los servicios disponibles y elige el que mejor se adapte a ti."
+                    android:textColor="#AFC6D8"
+                    android:textSize="14sp"
+                    android:lineSpacingExtra="3dp" />
+
+            </LinearLayout>
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Nuestros servicios"
+                android:layout_marginTop="26dp"
+                android:text="Servicios disponibles"
                 android:textColor="#FFFFFF"
-                android:textSize="26sp"
+                android:textSize="21sp"
                 android:textStyle="bold" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="6dp"
-                android:text="Encuentra el servicio ideal para ti."
-                android:textColor="#A9BBC8"
-                android:textSize="15sp" />
+                android:layout_marginTop="5dp"
+                android:text="Consulta sus precios y duración."
+                android:textColor="#AFC6D8"
+                android:textSize="13sp" />
 
             <ProgressBar
                 android:id="@+id/progresoServicios"
@@ -83,28 +133,33 @@
                 android:id="@+id/tvEstadoServicios"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="14dp"
+                android:layout_marginTop="18dp"
                 android:gravity="center"
+                android:padding="14dp"
                 android:text="Cargando servicios..."
-                android:textColor="#D4E4EE"
-                android:textSize="15sp" />
+                android:textColor="#B7C9D8"
+                android:textSize="14sp" />
 
             <LinearLayout
                 android:id="@+id/listaServicios"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="18dp"
+                android:layout_marginTop="20dp"
                 android:orientation="vertical" />
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnReintentarServicios"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:backgroundTint="#0A2234"
+                android:layout_height="52dp"
+                android:layout_marginTop="14dp"
                 android:text="Volver a cargar"
-                android:textColor="#08B9FF"
-                android:visibility="gone" />
+                android:textAllCaps="false"
+                android:textColor="#FFFFFF"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:visibility="gone"
+                app:backgroundTint="#087EAD"
+                app:cornerRadius="16dp" />
 
         </LinearLayout>
     </ScrollView>
