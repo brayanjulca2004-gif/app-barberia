@@ -21,6 +21,9 @@ import retrofit2.Response
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class ReservarCitaActivity : AppCompatActivity() {
 
@@ -268,10 +271,35 @@ class ReservarCitaActivity : AppCompatActivity() {
                     btnConfirmarCita.isEnabled = true
 
                     if (response.isSuccessful) {
-                        tvEstadoReserva.text =
-                            "¡Cita reservada correctamente!"
-
+                        tvEstadoReserva.text = "¡Cita reservada correctamente!"
                         mostrarMensaje("Reserva registrada")
+
+                        // Variables para capturar los datos seleccionados
+                        val nombreServicioSeleccionado = spServicio.selectedItem.toString()
+                        val nombreBarberoSeleccionado = spBarbero.selectedItem.toString()
+                        val horaSeleccionada = spHora.selectedItem.toString()
+
+                        // Guardamos localmente con Room usando corrutinas
+                        lifecycleScope.launch(Dispatchers.IO) {
+                            val db = pe.edu.cibertec.app_barberia.database.BarberiaRoomDatabase.getDatabase(applicationContext)
+
+                            val citaEntity = pe.edu.cibertec.app_barberia.database.entity.CitaEntity(
+                                servicio = nombreServicioSeleccionado,
+                                barbero = nombreBarberoSeleccionado,
+                                fecha = fechaSeleccionada,
+                                hora = horaSeleccionada,
+                                estado = "Confirmado"
+                            )
+
+                            db.citaDao().insertarCita(citaEntity)
+                        }
+                        // ---> LLAMAMOS A LA SINCRONIZACIÓN SILENCIOSA AQUÍ <---
+                        agregarCitaAIntentCalendario(
+                            servicio = nombreServicioSeleccionado,
+                            barbero = nombreBarberoSeleccionado,
+                            fecha = fechaSeleccionada,
+                            hora = horaSeleccionada
+                        )
 
                         setResult(RESULT_OK)
                         finish()
@@ -302,6 +330,38 @@ class ReservarCitaActivity : AppCompatActivity() {
                 }
             })
     }
+
+    private fun agregarCitaAIntentCalendario(servicio: String, barbero: String, fecha: String, hora: String) {
+        try {
+            val partesFecha = fecha.split("-")
+            val partesHora = hora.split(":")
+
+            if (partesFecha.size < 3 || partesHora.size < 2) return
+
+            val calInicio = java.util.Calendar.getInstance().apply {
+                set(partesFecha[0].toInt(), partesFecha[1].toInt() - 1, partesFecha[2].toInt(), partesHora[0].toInt(), partesHora[1].toInt())
+            }
+
+            val calFin = calInicio.clone() as java.util.Calendar
+            calFin.add(java.util.Calendar.MINUTE, 45) // Duración de 45 minutos
+
+            val intent = android.content.Intent(android.content.Intent.ACTION_INSERT).apply {
+                data = android.provider.CalendarContract.Events.CONTENT_URI
+                putExtra(android.provider.CalendarContract.Events.TITLE, "Cita en Barbería: $servicio")
+                putExtra(android.provider.CalendarContract.Events.DESCRIPTION, "Reservado con el barbero: $barbero en BarberApp")
+                putExtra(android.content.Intent.EXTRA_EMAIL, "soporte@barberapp.com")
+                putExtra(android.provider.CalendarContract.EXTRA_EVENT_BEGIN_TIME, calInicio.timeInMillis)
+                putExtra(android.provider.CalendarContract.EXTRA_EVENT_END_TIME, calFin.timeInMillis)
+            }
+
+            startActivity(intent)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Toast.makeText(this, "No se pudo abrir el calendario", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+
 
     private fun JsonObject.obtenerTexto(vararg claves: String): String? {
         for (clave in claves) {

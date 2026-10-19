@@ -16,7 +16,8 @@ import retrofit2.Callback
 import retrofit2.Response
 import okhttp3.ResponseBody
 
-class RegistroActivity : AppCompatActivity() {
+class
+RegistroActivity : AppCompatActivity() {
 
     private lateinit var etNombre: EditText
     private lateinit var etCorreo: EditText

@@ -3,6 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_CALENDAR" />
+    <uses-permission android:name="android.permission.WRITE_CALENDAR" />
 
     <application
         android:allowBackup="true"
@@ -14,44 +16,36 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Appbarberia"
         android:usesCleartextTraffic="true">
+
+        <!-- PANTALLA DE LOGIN / INICIO -->
         <activity
             android:name=".login.MainActivity"
             android:exported="true"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- CONTENEDOR PRINCIPAL CON EL BOTTOM BAR -->
         <activity
             android:name=".home.HomeActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
+
+        <!-- PANTALLA DE REGISTRO -->
         <activity
             android:name=".login.RegistroActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
-        <activity
-            android:name=".servicios.ServiciosActivity"
-            android:exported="false"
-            android:windowSoftInputMode="adjustResize" />
-        <activity
-            android:name=".barberos.BarberosActivity"
-            android:exported="false"
-            android:windowSoftInputMode="adjustResize" />
+
+        <!-- FLUJO DE RESERVA DE CITAS (Sigue siendo Activity) -->
         <activity
             android:name=".citas.ReservarCitaActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
-        <activity
-            android:name=".citas.MisCitasActivity"
-            android:exported="false"
-            android:windowSoftInputMode="adjustResize" />
-        <activity
-            android:name=".perfil.PerfilActivity"
-            android:exported="false"
-            android:windowSoftInputMode="adjustResize" />
+
     </application>
 
 </manifest>
