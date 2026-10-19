@@ -2,180 +2,234 @@
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#061B2A"
+    android:background="#F7F9FC"
     android:fillViewport="true"
     android:fitsSystemWindows="true"
-    android:scrollbars="none"
-    tools:context=".login.MainActivity">
+    android:scrollbars="none">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:gravity="center"
+        android:gravity="center_horizontal"
         android:paddingStart="24dp"
         android:paddingEnd="24dp"
-        android:paddingTop="32dp"
+        android:paddingTop="28dp"
         android:paddingBottom="32dp">
 
-        <ImageView
-            android:id="@+id/imgLogo"
-            android:layout_width="112dp"
-            android:layout_height="112dp"
-            android:src="@drawable/logo_barberapp"
-            android:scaleType="fitCenter"
-            android:contentDescription="Logo BarberApp" />
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="92dp"
+            android:layout_height="92dp"
+            app:cardBackgroundColor="#EAF2FB"
+            app:cardCornerRadius="24dp"
+            app:cardElevation="0dp"
+            android:clipToOutline="true">
+
+            <ImageView
+                android:id="@+id/imgLogo"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/logo_barberapp"
+                android:scaleType="centerCrop"
+                android:contentDescription="Logo BarberApp"/>
+        </com.google.android.material.card.MaterialCardView>
 
         <TextView
             android:id="@+id/tvNombre"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
             android:text="BARBERAPP"
-            android:textColor="#FFFFFF"
-            android:textSize="29sp"
+            android:textSize="25sp"
+            android:textColor="#1D3557"
             android:textStyle="bold"
-            android:letterSpacing="0.10" />
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:letterSpacing="0.08"/>
 
         <TextView
-            android:id="@+id/tvSlogan"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:text="Tu estilo, nuestra prioridad"
-            android:textColor="#AFC6D8"
-            android:textSize="14sp"
-            android:gravity="center" />
-
-        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:orientation="vertical"
-            android:padding="22dp"
-            android:background="@drawable/bg_panel_login">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Accede a tu cuenta"
-                android:textColor="#FFFFFF"
-                android:textSize="23sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="7dp"
-                android:text="Ingresa tus datos para continuar."
-                android:textColor="#AFC6D8"
-                android:textSize="14sp"
-                android:lineSpacingExtra="3dp" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="26dp"
-                android:text="CORREO ELECTRÓNICO"
-                android:textColor="#AFC6D8"
-                android:textSize="12sp"
-                android:textStyle="bold"
-                android:labelFor="@id/etCorreo" />
-
-            <EditText
-                android:id="@+id/etCorreo"
-                android:layout_width="match_parent"
-                android:layout_height="54dp"
-                android:layout_marginTop="9dp"
-                android:background="@drawable/bg_registro_input"
-                android:hint="Ingresa tu correo"
-                android:inputType="textEmailAddress"
-                android:imeOptions="actionNext"
-                android:autofillHints="emailAddress"
-                android:maxLines="1"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-                android:textColor="#FFFFFF"
-                android:textColorHint="#819CAF"
-                android:textSize="15sp" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:text="CONTRASEÑA"
-                android:textColor="#AFC6D8"
-                android:textSize="12sp"
-                android:textStyle="bold"
-                android:labelFor="@id/etPassword" />
-
-            <EditText
-                android:id="@+id/etPassword"
-                android:layout_width="match_parent"
-                android:layout_height="54dp"
-                android:layout_marginTop="9dp"
-                android:background="@drawable/bg_registro_input"
-                android:hint="Ingresa tu contraseña"
-                android:inputType="textPassword"
-                android:imeOptions="actionDone"
-                android:autofillHints="password"
-                android:maxLines="1"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-                android:textColor="#FFFFFF"
-                android:textColorHint="#819CAF"
-                android:textSize="15sp" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnIniciarSesion"
-                android:layout_width="match_parent"
-                android:layout_height="54dp"
-                android:layout_marginTop="28dp"
-                android:text="Iniciar sesión"
-                android:textAllCaps="false"
-                android:textColor="#FFFFFF"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                app:backgroundTint="#1599E8"
-                app:cornerRadius="18dp" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="18dp"
+            android:text="TU EXPERIENCIA COMIENZA AQUÍ"
+            android:textSize="11sp"
+            android:textColor="#2563A6"
+            android:textStyle="bold"
+            android:layout_marginTop="14dp"
             android:gravity="center"
-            android:orientation="horizontal">
+            android:letterSpacing="0.10"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Tu estilo merece una experiencia diferente."
+            android:textSize="14sp"
+            android:textColor="#607B9B"
+            android:layout_marginTop="8dp"
+            android:gravity="center"/>
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardBackgroundColor="#FFFFFF"
+            app:cardCornerRadius="24dp"
+            app:cardElevation="0dp"
+            android:layout_marginTop="23dp"
+            app:strokeColor="#DFE8F3"
+            app:strokeWidth="1dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="22dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Bienvenido"
+                    android:textSize="23sp"
+                    android:textColor="#1D3557"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Ingresa tus datos para continuar."
+                    android:textSize="14sp"
+                    android:textColor="#607B9B"
+                    android:layout_marginTop="7dp"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="CORREO ELECTRÓNICO"
+                    android:textSize="11sp"
+                    android:textColor="#2563A6"
+                    android:textStyle="bold"
+                    android:layout_marginTop="23dp"
+                    android:letterSpacing="0.05"
+                    android:labelFor="@id/etCorreo"/>
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardBackgroundColor="#F7F9FC"
+                    app:cardCornerRadius="14dp"
+                    app:cardElevation="0dp"
+                    android:layout_marginTop="10dp"
+                    app:strokeColor="#DFE8F3"
+                    app:strokeWidth="1dp">
+
+                    <EditText
+                        android:id="@+id/etCorreo"
+                        android:layout_width="match_parent"
+                        android:layout_height="56dp"
+                        android:background="@android:color/transparent"
+                        android:hint="Ingresa tu correo electrónico"
+                        android:inputType="textEmailAddress"
+                        android:singleLine="true"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp"
+                        android:textColor="#1D3557"
+                        android:textColorHint="#91A3B8"
+                        android:textSize="14sp"/>
+                </com.google.android.material.card.MaterialCardView>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="CONTRASEÑA"
+                    android:textSize="11sp"
+                    android:textColor="#2563A6"
+                    android:textStyle="bold"
+                    android:layout_marginTop="17dp"
+                    android:letterSpacing="0.05"
+                    android:labelFor="@id/etPassword"/>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    app:boxBackgroundMode="outline"
+                    app:boxBackgroundColor="#F7F9FC"
+                    app:boxStrokeColor="#DFE8F3"
+                    app:boxCornerRadiusTopStart="14dp"
+                    app:boxCornerRadiusTopEnd="14dp"
+                    app:boxCornerRadiusBottomStart="14dp"
+                    app:boxCornerRadiusBottomEnd="14dp"
+                    app:endIconMode="password_toggle"
+                    app:endIconTint="#2563A6"
+                    app:hintEnabled="false">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etPassword"
+                        android:layout_width="match_parent"
+                        android:layout_height="56dp"
+                        android:background="@android:color/transparent"
+                        android:hint="Ingresa tu contraseña"
+                        android:inputType="textPassword"
+                        android:singleLine="true"
+                        android:paddingStart="16dp"
+                        android:textColor="#1D3557"
+                        android:textColorHint="#91A3B8"
+                        android:textSize="14sp"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnIniciarSesion"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:layout_marginTop="26dp"
+                    android:text="Iniciar sesión"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    android:textColor="#FFFFFF"
+                    android:textAllCaps="false"
+                    app:backgroundTint="#1D3557"
+                    app:cornerRadius="15dp"/>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="21dp"
+            android:orientation="horizontal"
+            android:gravity="center">
 
             <TextView
                 android:id="@+id/tvNoCuenta"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="¿No tienes una cuenta?"
-                android:textColor="#AFC6D8"
-                android:textSize="14sp" />
+                android:layout_height="48dp"
+                android:gravity="center_vertical"
+                android:text="¿Aún no tienes una cuenta?"
+                android:textColor="#607B9B"
+                android:textSize="13sp"/>
 
             <TextView
                 android:id="@+id/tvRegistrarse"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:minHeight="48dp"
-                android:paddingStart="10dp"
-                android:paddingEnd="8dp"
-                android:gravity="center"
+                android:layout_height="48dp"
+                android:paddingStart="9dp"
+                android:gravity="center_vertical"
                 android:text="Regístrate"
-                android:textColor="#08B9FF"
-                android:textSize="14sp"
+                android:textColor="#2563A6"
+                android:textSize="13sp"
                 android:textStyle="bold"
                 android:clickable="true"
-                android:focusable="true" />
-
+                android:focusable="true"/>
         </LinearLayout>
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="BARBERAPP"
+            android:textSize="10sp"
+            android:textColor="#607B9B"
+            android:textStyle="bold"
+            android:layout_marginTop="19dp"
+            android:gravity="center"
+            android:letterSpacing="0.10"/>
     </LinearLayout>
-
 </ScrollView>

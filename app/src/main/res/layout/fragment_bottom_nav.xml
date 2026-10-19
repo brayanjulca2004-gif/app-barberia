@@ -4,9 +4,13 @@
     android:id="@+id/bottomBar"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#0A2234"
+    android:background="#FFFFFF"
+    android:elevation="5dp"
     android:orientation="horizontal"
-    android:paddingTop="6dp"
+    android:gravity="center_vertical"
+    android:paddingStart="8dp"
+    android:paddingEnd="8dp"
+    android:paddingTop="5dp"
     android:paddingBottom="5dp">
 
     <LinearLayout
@@ -14,26 +18,36 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:gravity="center"
         android:orientation="vertical"
+        android:gravity="center"
         android:clickable="true"
-        android:focusable="true">
+        android:focusable="true"
+        android:contentDescription="Inicio">
+
+        <FrameLayout
+            android:layout_width="38dp"
+            android:layout_height="38dp">
+
+            <ImageView
+                android:id="@+id/iconoInicio"
+                android:layout_width="23dp"
+                android:layout_height="23dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_nav_inicio"
+                android:tint="#899CB0"
+                android:contentDescription="Inicio"/>
+
+        </FrameLayout>
 
         <TextView
+            android:id="@+id/textoInicio"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="⌂"
-            android:textColor="#08B9FF"
-            android:textSize="28sp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
             android:text="Inicio"
-            android:textColor="#08B9FF"
-            android:textSize="11sp"
-            android:textStyle="bold" />
+            android:textColor="#899CB0"
+            android:textSize="10sp"/>
+
     </LinearLayout>
 
     <LinearLayout
@@ -41,24 +55,36 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:gravity="center"
         android:orientation="vertical"
+        android:gravity="center"
         android:clickable="true"
-        android:focusable="true">
+        android:focusable="true"
+        android:contentDescription="Servicios">
+
+        <FrameLayout
+            android:layout_width="38dp"
+            android:layout_height="38dp">
+
+            <ImageView
+                android:id="@+id/iconoServicios"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_nav_servicios"
+                android:tint="#899CB0"
+                android:contentDescription="Servicios"/>
+
+        </FrameLayout>
 
         <TextView
+            android:id="@+id/textoServicios"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="✂"
-            android:textColor="#AFC6D8"
-            android:textSize="24sp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
             android:text="Servicios"
-            android:textColor="#AFC6D8"
-            android:textSize="11sp" />
+            android:textColor="#899CB0"
+            android:textSize="10sp"/>
+
     </LinearLayout>
 
     <LinearLayout
@@ -66,23 +92,36 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:gravity="center"
         android:orientation="vertical"
+        android:gravity="center"
         android:clickable="true"
-        android:focusable="true">
+        android:focusable="true"
+        android:contentDescription="Barberos">
+
+        <FrameLayout
+            android:layout_width="38dp"
+            android:layout_height="38dp">
+
+            <ImageView
+                android:id="@+id/iconoBarberos"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_nav_barberos"
+                android:tint="#899CB0"
+                android:contentDescription="Barberos"/>
+
+        </FrameLayout>
 
         <TextView
+            android:id="@+id/textoBarberos"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="💈"
-            android:textSize="23sp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
             android:text="Barberos"
-            android:textColor="#AFC6D8"
-            android:textSize="11sp" />
+            android:textColor="#899CB0"
+            android:textSize="10sp"/>
+
     </LinearLayout>
 
     <LinearLayout
@@ -90,23 +129,36 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:gravity="center"
         android:orientation="vertical"
+        android:gravity="center"
         android:clickable="true"
-        android:focusable="true">
+        android:focusable="true"
+        android:contentDescription="Citas">
+
+        <FrameLayout
+            android:layout_width="38dp"
+            android:layout_height="38dp">
+
+            <ImageView
+                android:id="@+id/iconoCitas"
+                android:layout_width="23dp"
+                android:layout_height="23dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_nav_citas"
+                android:tint="#899CB0"
+                android:contentDescription="Citas"/>
+
+        </FrameLayout>
 
         <TextView
+            android:id="@+id/textoCitas"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="📅"
-            android:textSize="23sp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
             android:text="Citas"
-            android:textColor="#AFC6D8"
-            android:textSize="11sp" />
+            android:textColor="#899CB0"
+            android:textSize="10sp"/>
+
     </LinearLayout>
 
     <LinearLayout
@@ -114,23 +166,36 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:gravity="center"
         android:orientation="vertical"
+        android:gravity="center"
         android:clickable="true"
-        android:focusable="true">
+        android:focusable="true"
+        android:contentDescription="Perfil">
+
+        <FrameLayout
+            android:layout_width="38dp"
+            android:layout_height="38dp">
+
+            <ImageView
+                android:id="@+id/iconoPerfil"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_nav_perfil"
+                android:tint="#899CB0"
+                android:contentDescription="Perfil"/>
+
+        </FrameLayout>
 
         <TextView
+            android:id="@+id/textoPerfil"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="👤"
-            android:textSize="23sp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
             android:text="Perfil"
-            android:textColor="#AFC6D8"
-            android:textSize="11sp" />
+            android:textColor="#899CB0"
+            android:textSize="10sp"/>
+
     </LinearLayout>
 
 </LinearLayout>

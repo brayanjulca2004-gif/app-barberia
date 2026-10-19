@@ -1,6 +1,8 @@
 package pe.edu.cibertec.app_barberia.citas
 
 import android.app.DatePickerDialog
+import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
@@ -10,7 +12,11 @@ import android.widget.ProgressBar
 import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
 import com.google.gson.JsonObject
 import pe.edu.cibertec.app_barberia.R
 import pe.edu.cibertec.app_barberia.data.RetrofitClient
@@ -34,17 +40,28 @@ class ReservarCitaActivity : AppCompatActivity() {
 
     private val servicios = mutableListOf<JsonObject>()
     private val barberos = mutableListOf<JsonObject>()
-
-    private var fechaSeleccionada = ""
     private val calendario = Calendar.getInstance()
+    private var fechaSeleccionada = ""
+    private var horasSeleccionables = emptyList<String>()
 
-    private val colorTexto = android.graphics.Color.parseColor("#0A2234")
-    private val colorFondoOpciones =
-        android.graphics.Color.parseColor("#E3EFF8")
+    private var llamadaReserva: Call<JsonObject>? = null
+    private var llamadaServicios: Call<List<JsonObject>>? = null
+    private var llamadaBarberos: Call<List<JsonObject>>? = null
+
+    private val colorTexto = Color.parseColor("#1D3557")
+    private val colorFondoOpciones = Color.parseColor("#F7F9FC")
+
+    private val horariosBase = listOf(
+        "09:00", "10:00", "11:00", "12:00", "13:00",
+        "14:00", "15:00", "16:00", "17:00", "18:00"
+    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        enableEdgeToEdge()
         setContentView(R.layout.activity_reservar_cita)
+        configurarBarrasSistema()
 
         spServicio = findViewById(R.id.spServicio)
         spBarbero = findViewById(R.id.spBarbero)
@@ -55,7 +72,9 @@ class ReservarCitaActivity : AppCompatActivity() {
         progresoReserva = findViewById(R.id.progresoReserva)
         tvBackReservar = findViewById(R.id.tvBackReservar)
 
-        configurarHoras()
+        spHora.adapter = crearAdaptador(
+            listOf("Primero selecciona una fecha")
+        )
 
         btnFecha.setOnClickListener {
             seleccionarFecha()
@@ -73,7 +92,72 @@ class ReservarCitaActivity : AppCompatActivity() {
         cargarBarberos()
     }
 
-    private fun crearAdaptador(opciones: List<String>): ArrayAdapter<String> {
+    override fun onResume() {
+        super.onResume()
+
+        if (
+            fechaSeleccionada.isNotBlank() &&
+            ::spHora.isInitialized
+        ) {
+            actualizarHorarios()
+        }
+    }
+
+    private fun configurarBarrasSistema() {
+        val principal = findViewById<View>(R.id.main)
+        val barraInferior = findViewById<View>(
+            R.id.bottomNavContainer
+        )
+        val alturaBase = dp(78)
+
+        window.navigationBarColor = Color.TRANSPARENT
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            window.isNavigationBarContrastEnforced = false
+        }
+
+        WindowCompat.getInsetsController(
+            window,
+            window.decorView
+        ).apply {
+            isAppearanceLightStatusBars = true
+            isAppearanceLightNavigationBars = true
+        }
+
+        ViewCompat.setOnApplyWindowInsetsListener(
+            principal
+        ) { vista, insets ->
+            val barras = insets.getInsets(
+                WindowInsetsCompat.Type.systemBars()
+            )
+
+            vista.setPadding(
+                barras.left,
+                barras.top,
+                barras.right,
+                0
+            )
+
+            val nuevaAltura = alturaBase + barras.bottom
+            val parametros = barraInferior.layoutParams
+
+            if (parametros.height != nuevaAltura) {
+                parametros.height = nuevaAltura
+                barraInferior.layoutParams = parametros
+            }
+
+            barraInferior.setPadding(
+                0, 0, 0, barras.bottom
+            )
+            barraInferior.setBackgroundColor(Color.WHITE)
+
+            insets
+        }
+    }
+
+    private fun crearAdaptador(
+        opciones: List<String>
+    ): ArrayAdapter<String> {
         return object : ArrayAdapter<String>(
             this,
             android.R.layout.simple_spinner_item,
@@ -92,9 +176,10 @@ class ReservarCitaActivity : AppCompatActivity() {
 
                 vista.setTextColor(colorTexto)
                 vista.textSize = 14f
-                vista.setPadding(14, 0, 38, 0)
+                vista.setPadding(
+                    dp(12), 0, dp(38), 0
+                )
                 vista.maxLines = 1
-
                 return vista
             }
 
@@ -112,9 +197,13 @@ class ReservarCitaActivity : AppCompatActivity() {
                 vista.setTextColor(colorTexto)
                 vista.setBackgroundColor(colorFondoOpciones)
                 vista.textSize = 14f
-                vista.setPadding(20, 14, 20, 14)
+                vista.setPadding(
+                    dp(18),
+                    dp(14),
+                    dp(18),
+                    dp(14)
+                )
                 vista.maxLines = 1
-
                 return vista
             }
         }.also {
@@ -124,26 +213,18 @@ class ReservarCitaActivity : AppCompatActivity() {
         }
     }
 
-    private fun configurarHoras() {
-        val horas = listOf(
-            "09:00", "10:00", "11:00", "12:00",
-            "13:00", "14:00", "15:00", "16:00",
-            "17:00", "18:00"
-        )
-
-        spHora.adapter = crearAdaptador(horas)
-    }
-
     private fun seleccionarFecha() {
         val hoy = Calendar.getInstance()
 
-        val dialogo = DatePickerDialog(
+        DatePickerDialog(
             this,
             { _, anio, mes, dia ->
                 calendario.set(
                     anio, mes, dia, 0, 0, 0
                 )
-                calendario.set(Calendar.MILLISECOND, 0)
+                calendario.set(
+                    Calendar.MILLISECOND, 0
+                )
 
                 fechaSeleccionada = String.format(
                     Locale.US,
@@ -153,35 +234,71 @@ class ReservarCitaActivity : AppCompatActivity() {
                     dia
                 )
 
-                val formato = SimpleDateFormat(
+                btnFecha.text = SimpleDateFormat(
                     "dd/MM/yyyy",
                     Locale.getDefault()
-                )
+                ).format(calendario.time)
 
-                btnFecha.text = formato.format(calendario.time)
-                tvEstadoReserva.text = ""
+                actualizarHorarios()
             },
             hoy.get(Calendar.YEAR),
             hoy.get(Calendar.MONTH),
             hoy.get(Calendar.DAY_OF_MONTH)
-        )
+        ).apply {
+            datePicker.minDate = hoy.timeInMillis
+            show()
+        }
+    }
 
-        dialogo.datePicker.minDate = hoy.timeInMillis
-        dialogo.show()
+    private fun actualizarHorarios() {
+        val ahora = System.currentTimeMillis()
+
+        horasSeleccionables = horariosBase.filter { hora ->
+            val instante = obtenerInstante(
+                fechaSeleccionada,
+                hora
+            )
+            instante != null && instante > ahora
+        }
+
+        if (horasSeleccionables.isEmpty()) {
+            spHora.adapter = crearAdaptador(
+                listOf("No quedan horarios para esta fecha")
+            )
+
+            tvEstadoReserva.text =
+                "Selecciona otro día para reservar tu cita."
+
+            btnConfirmarCita.isEnabled = false
+        } else {
+            spHora.adapter = crearAdaptador(
+                horasSeleccionables
+            )
+
+            tvEstadoReserva.text = ""
+            btnConfirmarCita.isEnabled = true
+        }
     }
 
     private fun cargarServicios() {
-        RetrofitClient.api.listarServicios()
-            .enqueue(object : Callback<List<JsonObject>> {
+        llamadaServicios = RetrofitClient.api.listarServicios()
 
+        llamadaServicios?.enqueue(
+            object : Callback<List<JsonObject>> {
                 override fun onResponse(
                     call: Call<List<JsonObject>>,
                     response: Response<List<JsonObject>>
                 ) {
+                    if (
+                        isFinishing ||
+                        isDestroyed ||
+                        call.isCanceled
+                    ) return
+
                     if (response.isSuccessful) {
                         servicios.clear()
                         servicios.addAll(
-                            response.body() ?: emptyList()
+                            response.body().orEmpty()
                         )
 
                         val nombres = servicios.map {
@@ -192,7 +309,11 @@ class ReservarCitaActivity : AppCompatActivity() {
                             ) ?: "Servicio"
                         }
 
-                        spServicio.adapter = crearAdaptador(nombres)
+                        spServicio.adapter = crearAdaptador(
+                            nombres.ifEmpty {
+                                listOf("No hay servicios disponibles")
+                            }
+                        )
                     } else {
                         mostrarMensaje(
                             "No se pudieron cargar los servicios"
@@ -204,25 +325,39 @@ class ReservarCitaActivity : AppCompatActivity() {
                     call: Call<List<JsonObject>>,
                     t: Throwable
                 ) {
-                    mostrarMensaje(
-                        "Error al conectar con los servicios"
-                    )
+                    if (
+                        !call.isCanceled &&
+                        !isFinishing &&
+                        !isDestroyed
+                    ) {
+                        mostrarMensaje(
+                            "Error al conectar con los servicios"
+                        )
+                    }
                 }
-            })
+            }
+        )
     }
 
     private fun cargarBarberos() {
-        RetrofitClient.api.listarBarberos()
-            .enqueue(object : Callback<List<JsonObject>> {
+        llamadaBarberos = RetrofitClient.api.listarBarberos()
 
+        llamadaBarberos?.enqueue(
+            object : Callback<List<JsonObject>> {
                 override fun onResponse(
                     call: Call<List<JsonObject>>,
                     response: Response<List<JsonObject>>
                 ) {
+                    if (
+                        isFinishing ||
+                        isDestroyed ||
+                        call.isCanceled
+                    ) return
+
                     if (response.isSuccessful) {
                         barberos.clear()
                         barberos.addAll(
-                            response.body() ?: emptyList()
+                            response.body().orEmpty()
                         )
 
                         val nombres = barberos.map {
@@ -232,7 +367,11 @@ class ReservarCitaActivity : AppCompatActivity() {
                             ) ?: "Barbero"
                         }
 
-                        spBarbero.adapter = crearAdaptador(nombres)
+                        spBarbero.adapter = crearAdaptador(
+                            nombres.ifEmpty {
+                                listOf("No hay barberos disponibles")
+                            }
+                        )
                     } else {
                         mostrarMensaje(
                             "No se pudieron cargar los barberos"
@@ -244,20 +383,25 @@ class ReservarCitaActivity : AppCompatActivity() {
                     call: Call<List<JsonObject>>,
                     t: Throwable
                 ) {
-                    mostrarMensaje(
-                        "Error al conectar con los barberos"
-                    )
+                    if (
+                        !call.isCanceled &&
+                        !isFinishing &&
+                        !isDestroyed
+                    ) {
+                        mostrarMensaje(
+                            "Error al conectar con los barberos"
+                        )
+                    }
                 }
-            })
+            }
+        )
     }
 
     private fun registrarCita() {
-        val preferencias = getSharedPreferences(
+        val idUsuario = getSharedPreferences(
             "BarberApp",
             MODE_PRIVATE
-        )
-
-        val idUsuario = preferencias.getInt("idUsuario", -1)
+        ).getInt("idUsuario", -1)
 
         if (idUsuario <= 0) {
             mostrarMensaje("Inicia sesión nuevamente")
@@ -265,13 +409,20 @@ class ReservarCitaActivity : AppCompatActivity() {
         }
 
         if (fechaSeleccionada.isBlank()) {
-            mostrarMensaje("Selecciona una fecha")
+            mostrarEstado("Primero selecciona una fecha.")
             return
         }
 
         if (servicios.isEmpty() || barberos.isEmpty()) {
-            mostrarMensaje(
-                "Espera a que carguen los servicios y barberos"
+            mostrarEstado(
+                "Espera a que carguen los servicios y barberos."
+            )
+            return
+        }
+
+        if (horasSeleccionables.isEmpty()) {
+            mostrarEstado(
+                "Selecciona otro día. Ya no quedan horarios futuros."
             )
             return
         }
@@ -279,13 +430,14 @@ class ReservarCitaActivity : AppCompatActivity() {
         val servicio = servicios.getOrNull(
             spServicio.selectedItemPosition
         )
+
         val barbero = barberos.getOrNull(
             spBarbero.selectedItemPosition
         )
 
         if (servicio == null || barbero == null) {
-            mostrarMensaje(
-                "Selecciona un servicio y un barbero"
+            mostrarEstado(
+                "Selecciona un servicio y un barbero."
             )
             return
         }
@@ -299,13 +451,36 @@ class ReservarCitaActivity : AppCompatActivity() {
         )
 
         if (idServicio == null || idBarbero == null) {
-            mostrarMensaje(
-                "No se pudieron identificar el servicio o barbero"
+            mostrarEstado(
+                "No se pudieron identificar el servicio o barbero."
             )
             return
         }
 
-        val hora = spHora.selectedItem?.toString() ?: ""
+        val hora = spHora.selectedItem
+            ?.toString()
+            .orEmpty()
+
+        if (hora !in horasSeleccionables) {
+            mostrarEstado("Selecciona un horario válido.")
+            return
+        }
+
+        val fechaHora = obtenerInstante(
+            fechaSeleccionada,
+            hora
+        )
+
+        if (
+            fechaHora == null ||
+            fechaHora <= System.currentTimeMillis()
+        ) {
+            actualizarHorarios()
+            mostrarEstado(
+                "Ese horario ya pasó. Selecciona uno posterior."
+            )
+            return
+        }
 
         val solicitud = JsonObject().apply {
             addProperty("idUsuario", idUsuario)
@@ -318,36 +493,40 @@ class ReservarCitaActivity : AppCompatActivity() {
 
         progresoReserva.visibility = View.VISIBLE
         btnConfirmarCita.isEnabled = false
-        tvEstadoReserva.text = ""
+        tvEstadoReserva.text = "Procesando reserva..."
 
-        RetrofitClient.api.reservarCita(solicitud)
-            .enqueue(object : Callback<JsonObject> {
+        llamadaReserva = RetrofitClient.api.reservarCita(
+            solicitud
+        )
 
+        llamadaReserva?.enqueue(
+            object : Callback<JsonObject> {
                 override fun onResponse(
                     call: Call<JsonObject>,
                     response: Response<JsonObject>
                 ) {
+                    if (
+                        isFinishing ||
+                        isDestroyed ||
+                        call.isCanceled
+                    ) return
+
                     progresoReserva.visibility = View.GONE
                     btnConfirmarCita.isEnabled = true
 
                     if (response.isSuccessful) {
-                        tvEstadoReserva.text =
-                            "¡Cita reservada correctamente!"
-
-                        mostrarMensaje("Reserva registrada")
+                        mostrarMensaje(
+                            "Reserva registrada correctamente"
+                        )
                         setResult(RESULT_OK)
                         finish()
                     } else {
-                        val mensaje = try {
-                            response.errorBody()?.string()
-                                ?: "No se pudo registrar la cita"
-                        } catch (_: Exception) {
-                            "No se pudo registrar la cita"
-                        }
-
-                        tvEstadoReserva.text = mensaje
-                        mostrarMensaje(
-                            "No se pudo reservar la cita"
+                        mostrarEstado(
+                            if (response.code() == 409) {
+                                "Ese horario no está disponible. Elige otro e inténtalo nuevamente."
+                            } else {
+                                "No se pudo registrar la cita (HTTP ${response.code()})."
+                            }
                         )
                     }
                 }
@@ -356,26 +535,50 @@ class ReservarCitaActivity : AppCompatActivity() {
                     call: Call<JsonObject>,
                     t: Throwable
                 ) {
+                    if (
+                        isFinishing ||
+                        isDestroyed ||
+                        call.isCanceled
+                    ) return
+
                     progresoReserva.visibility = View.GONE
                     btnConfirmarCita.isEnabled = true
 
-                    tvEstadoReserva.text =
-                        "No se pudo conectar con el servidor"
-
-                    mostrarMensaje(
-                        "Verifica que Spring Boot esté ejecutándose"
+                    mostrarEstado(
+                        "No se pudo conectar con el servidor. Inténtalo nuevamente."
                     )
                 }
-            })
+            }
+        )
+    }
+
+    private fun obtenerInstante(
+        fecha: String,
+        hora: String
+    ): Long? {
+        if (fecha.isBlank() || hora.isBlank()) return null
+
+        return try {
+            SimpleDateFormat(
+                "yyyy-MM-dd HH:mm",
+                Locale.US
+            ).apply {
+                isLenient = false
+            }.parse("$fecha $hora")?.time
+        } catch (_: Exception) {
+            null
+        }
     }
 
     private fun JsonObject.obtenerTexto(
         vararg claves: String
     ): String? {
         for (clave in claves) {
-            if (has(clave) && !get(clave).isJsonNull) {
+            val valor = get(clave)
+
+            if (valor != null && !valor.isJsonNull) {
                 return try {
-                    get(clave).asString
+                    valor.asString
                 } catch (_: Exception) {
                     null
                 }
@@ -388,9 +591,11 @@ class ReservarCitaActivity : AppCompatActivity() {
         vararg claves: String
     ): Int? {
         for (clave in claves) {
-            if (has(clave) && !get(clave).isJsonNull) {
+            val valor = get(clave)
+
+            if (valor != null && !valor.isJsonNull) {
                 return try {
-                    get(clave).asInt
+                    valor.asInt
                 } catch (_: Exception) {
                     null
                 }
@@ -399,11 +604,33 @@ class ReservarCitaActivity : AppCompatActivity() {
         return null
     }
 
+    private fun mostrarEstado(mensaje: String) {
+        tvEstadoReserva.text = mensaje
+        Toast.makeText(
+            this,
+            mensaje,
+            Toast.LENGTH_SHORT
+        ).show()
+    }
+
     private fun mostrarMensaje(mensaje: String) {
         Toast.makeText(
             this,
             mensaje,
             Toast.LENGTH_LONG
         ).show()
+    }
+
+    private fun dp(valor: Int): Int {
+        return (
+                valor * resources.displayMetrics.density
+                ).toInt()
+    }
+
+    override fun onDestroy() {
+        llamadaReserva?.cancel()
+        llamadaServicios?.cancel()
+        llamadaBarberos?.cancel()
+        super.onDestroy()
     }
 }

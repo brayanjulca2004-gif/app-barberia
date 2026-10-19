@@ -1,17 +1,23 @@
-
 package pe.edu.cibertec.app_barberia.perfil
 
-import android.content.Intent
+import android.graphics.Color
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.provider.OpenableColumns
+import android.util.Patterns
+import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
 import com.bumptech.glide.Glide
 import com.google.gson.JsonObject
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -35,26 +41,42 @@ class PerfilActivity : AppCompatActivity() {
     private lateinit var etPasswordNueva: EditText
     private lateinit var etPasswordConfirmar: EditText
     private lateinit var tvEstadoPerfil: TextView
+    private lateinit var tvEstadoFoto: TextView
+    private lateinit var tvEstadoDatos: TextView
+    private lateinit var tvEstadoPassword: TextView
+    private lateinit var btnCambiarFoto: Button
+    private lateinit var btnGuardarPerfil: Button
+    private lateinit var btnCambiarPassword: Button
 
     private var idUsuario = -1
-    private var fotoSeleccionada: Uri? = null
+    private var llamadaPerfil: Call<JsonObject>? = null
+    private var llamadaGuardar: Call<JsonObject>? = null
+    private var llamadaPassword: Call<JsonObject>? = null
+    private var llamadaFoto: Call<JsonObject>? = null
 
-    private val selectorFoto =
-        registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
-            if (uri != null) {
-                fotoSeleccionada = uri
-                Glide.with(this)
-                    .load(uri)
-                    .circleCrop()
-                    .into(imgFotoPerfil)
+    private val selectorFoto = registerForActivityResult(
+        ActivityResultContracts.GetContent()
+    ) { uri ->
+        if (
+            uri != null &&
+            idUsuario > 0 &&
+            ::imgFotoPerfil.isInitialized
+        ) {
+            Glide.with(this)
+                .load(uri)
+                .circleCrop()
+                .into(imgFotoPerfil)
 
-                subirFoto(uri)
-            }
+            subirFoto(uri)
         }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        enableEdgeToEdge()
         setContentView(R.layout.activity_perfil)
+        configurarBarrasSistema()
 
         imgFotoPerfil = findViewById(R.id.imgFotoPerfil)
         etNombrePerfil = findViewById(R.id.etNombrePerfil)
@@ -64,20 +86,22 @@ class PerfilActivity : AppCompatActivity() {
         etPasswordNueva = findViewById(R.id.etPasswordNueva)
         etPasswordConfirmar = findViewById(R.id.etPasswordConfirmar)
         tvEstadoPerfil = findViewById(R.id.tvEstadoPerfil)
+        tvEstadoFoto = findViewById(R.id.tvEstadoFoto)
+        tvEstadoDatos = findViewById(R.id.tvEstadoDatos)
+        tvEstadoPassword = findViewById(R.id.tvEstadoPassword)
 
-        val btnCambiarFoto =
-            findViewById<Button>(R.id.btnCambiarFoto)
-        val btnGuardarPerfil =
-            findViewById<Button>(R.id.btnGuardarPerfil)
-        val btnCambiarPassword =
-            findViewById<Button>(R.id.btnCambiarPassword)
-        val tvVolverPerfil =
-            findViewById<TextView>(R.id.tvVolverPerfil)
+        btnCambiarFoto = findViewById(R.id.btnCambiarFoto)
+        btnGuardarPerfil = findViewById(R.id.btnGuardarPerfil)
+        btnCambiarPassword = findViewById(R.id.btnCambiarPassword)
 
-        val preferencias = getSharedPreferences("BarberApp", MODE_PRIVATE)
-        idUsuario = preferencias.getInt("idUsuario", -1)
+        idUsuario = getSharedPreferences(
+            "BarberApp",
+            MODE_PRIVATE
+        ).getInt("idUsuario", -1)
 
-        tvVolverPerfil.setOnClickListener {
+        findViewById<TextView>(
+            R.id.tvVolverPerfil
+        ).setOnClickListener {
             finish()
         }
 
@@ -93,75 +117,172 @@ class PerfilActivity : AppCompatActivity() {
             cambiarPassword()
         }
 
-        if (idUsuario == -1) {
-            tvEstadoPerfil.text = "No se encontró la sesión del usuario."
+        if (idUsuario <= 0) {
+            mostrarEstado(
+                tvEstadoPerfil,
+                "No se encontró la sesión del usuario."
+            )
+
+            btnCambiarFoto.isEnabled = false
             btnGuardarPerfil.isEnabled = false
             btnCambiarPassword.isEnabled = false
-            btnCambiarFoto.isEnabled = false
             return
+        }
+
+        val fotoGuardada = getSharedPreferences(
+            "BarberApp",
+            MODE_PRIVATE
+        ).getString("fotoUrl", null)
+
+        if (!fotoGuardada.isNullOrBlank()) {
+            mostrarFoto(fotoGuardada)
         }
 
         cargarPerfil()
     }
 
-    private fun cargarPerfil() {
-        tvEstadoPerfil.text = "Cargando perfil..."
+    private fun configurarBarrasSistema() {
+        val principal = findViewById<View>(R.id.main)
+        val barraInferior = findViewById<View>(
+            R.id.bottomNavContainer
+        )
 
-        RetrofitClient.api.obtenerPerfil(idUsuario)
-            .enqueue(object : Callback<JsonObject> {
+        val alturaBase = dp(78)
+
+        window.navigationBarColor = Color.TRANSPARENT
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            window.isNavigationBarContrastEnforced = false
+        }
+
+        WindowCompat.getInsetsController(
+            window,
+            window.decorView
+        ).apply {
+            isAppearanceLightStatusBars = true
+            isAppearanceLightNavigationBars = true
+        }
+
+        ViewCompat.setOnApplyWindowInsetsListener(
+            principal
+        ) { vista, insets ->
+            val barras = insets.getInsets(
+                WindowInsetsCompat.Type.systemBars()
+            )
+
+            vista.setPadding(
+                barras.left,
+                barras.top,
+                barras.right,
+                0
+            )
+
+            val nuevaAltura = alturaBase + barras.bottom
+            val parametros = barraInferior.layoutParams
+
+            if (parametros.height != nuevaAltura) {
+                parametros.height = nuevaAltura
+                barraInferior.layoutParams = parametros
+            }
+
+            barraInferior.setPadding(
+                0, 0, 0, barras.bottom
+            )
+            barraInferior.setBackgroundColor(Color.WHITE)
+
+            insets
+        }
+    }
+
+    private fun cargarPerfil() {
+        mostrarEstado(
+            tvEstadoPerfil,
+            "Cargando perfil..."
+        )
+
+        llamadaPerfil = RetrofitClient.api.obtenerPerfil(
+            idUsuario
+        )
+
+        llamadaPerfil?.enqueue(
+            object : Callback<JsonObject> {
 
                 override fun onResponse(
                     call: Call<JsonObject>,
                     response: Response<JsonObject>
                 ) {
+                    if (
+                        isFinishing ||
+                        isDestroyed ||
+                        call.isCanceled
+                    ) return
+
                     if (!response.isSuccessful) {
-                        tvEstadoPerfil.text =
+                        mostrarEstado(
+                            tvEstadoPerfil,
                             "No se pudo cargar el perfil (${response.code()})."
+                        )
                         return
                     }
 
-                    val datos = response.body() ?: return
+                    val datos = response.body()
 
-                    etNombrePerfil.setText(
-                        datos.get("nombre")?.asString ?: ""
-                    )
-                    etCorreoPerfil.setText(
-                        datos.get("correo")?.asString ?: ""
-                    )
-                    etTelefonoPerfil.setText(
-                        if (datos.get("telefono") == null ||
-                            datos.get("telefono").isJsonNull
-                        ) "" else datos.get("telefono").asString
-                    )
-
-                    val foto = datos.get("fotoUrl")
-                    if (foto != null && !foto.isJsonNull &&
-                        foto.asString.isNotBlank()
-                    ) {
-                        Glide.with(this@PerfilActivity)
-                            .load(foto.asString)
-                            .circleCrop()
-                            .placeholder(R.drawable.logo_barberapp)
-                            .into(imgFotoPerfil)
-
-                        getSharedPreferences(
-                            "BarberApp", MODE_PRIVATE
-                        ).edit()
-                            .putString("fotoUrl", foto.asString)
-                            .apply()
+                    if (datos == null) {
+                        mostrarEstado(
+                            tvEstadoPerfil,
+                            "No se encontraron los datos del perfil."
+                        )
+                        return
                     }
 
-                    tvEstadoPerfil.text = "Perfil cargado correctamente."
+                    etNombrePerfil.setText(
+                        obtenerTexto(datos, "nombre")
+                    )
+
+                    etCorreoPerfil.setText(
+                        obtenerTexto(datos, "correo")
+                    )
+
+                    etTelefonoPerfil.setText(
+                        obtenerTexto(datos, "telefono")
+                    )
+
+                    val foto = obtenerTexto(
+                        datos,
+                        "fotoUrl"
+                    )
+
+                    if (foto.isNotBlank()) {
+                        getSharedPreferences(
+                            "BarberApp",
+                            MODE_PRIVATE
+                        ).edit()
+                            .putString("fotoUrl", foto)
+                            .apply()
+
+                        mostrarFoto(foto)
+                    }
+
+                    tvEstadoPerfil.visibility = View.GONE
                 }
 
                 override fun onFailure(
                     call: Call<JsonObject>,
                     t: Throwable
                 ) {
-                    tvEstadoPerfil.text =
-                        "Error de conexión: ${t.localizedMessage}"
+                    if (
+                        isFinishing ||
+                        isDestroyed ||
+                        call.isCanceled
+                    ) return
+
+                    mostrarEstado(
+                        tvEstadoPerfil,
+                        "No se pudo conectar con el servidor."
+                    )
                 }
-            })
+            }
+        )
     }
 
     private fun guardarPerfil() {
@@ -170,7 +291,20 @@ class PerfilActivity : AppCompatActivity() {
         val telefono = etTelefonoPerfil.text.toString().trim()
 
         if (nombre.isEmpty() || correo.isEmpty()) {
-            tvEstadoPerfil.text = "Completa el nombre y el correo."
+            mostrarEstado(
+                tvEstadoDatos,
+                "Completa el nombre y el correo."
+            )
+            return
+        }
+
+        if (!Patterns.EMAIL_ADDRESS.matcher(correo).matches()) {
+            etCorreoPerfil.error = "Ingresa un correo válido"
+
+            mostrarEstado(
+                tvEstadoDatos,
+                "Ingresa un correo electrónico válido."
+            )
             return
         }
 
@@ -180,35 +314,51 @@ class PerfilActivity : AppCompatActivity() {
             addProperty("telefono", telefono)
         }
 
-        tvEstadoPerfil.text = "Guardando cambios..."
+        btnGuardarPerfil.isEnabled = false
 
-        RetrofitClient.api.actualizarPerfil(idUsuario, datos)
-            .enqueue(object : Callback<JsonObject> {
+        mostrarEstado(
+            tvEstadoDatos,
+            "Guardando cambios..."
+        )
+
+        llamadaGuardar = RetrofitClient.api.actualizarPerfil(
+            idUsuario,
+            datos
+        )
+
+        llamadaGuardar?.enqueue(
+            object : Callback<JsonObject> {
 
                 override fun onResponse(
                     call: Call<JsonObject>,
                     response: Response<JsonObject>
                 ) {
+                    if (
+                        isFinishing ||
+                        isDestroyed ||
+                        call.isCanceled
+                    ) return
+
+                    btnGuardarPerfil.isEnabled = true
+
                     if (response.isSuccessful) {
                         getSharedPreferences(
-                            "BarberApp", MODE_PRIVATE
+                            "BarberApp",
+                            MODE_PRIVATE
                         ).edit()
                             .putString("nombreUsuario", nombre)
                             .putString("correoUsuario", correo)
                             .apply()
 
-                        tvEstadoPerfil.text =
+                        mostrarEstado(
+                            tvEstadoDatos,
                             "Datos actualizados correctamente."
-
-                        Toast.makeText(
-                            this@PerfilActivity,
-                            "Perfil guardado",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        )
                     } else {
-                        tvEstadoPerfil.text =
-                            "No se pudo guardar (${response.code()}). " +
-                                    mensajeError(response)
+                        mostrarEstado(
+                            tvEstadoDatos,
+                            "No se pudo guardar (${response.code()}). ${mensajeError(response)}"
+                        )
                     }
                 }
 
@@ -216,10 +366,21 @@ class PerfilActivity : AppCompatActivity() {
                     call: Call<JsonObject>,
                     t: Throwable
                 ) {
-                    tvEstadoPerfil.text =
-                        "Error de conexión: ${t.localizedMessage}"
+                    if (
+                        isFinishing ||
+                        isDestroyed ||
+                        call.isCanceled
+                    ) return
+
+                    btnGuardarPerfil.isEnabled = true
+
+                    mostrarEstado(
+                        tvEstadoDatos,
+                        "No se pudo conectar con el servidor."
+                    )
                 }
-            })
+            }
+        )
     }
 
     private fun cambiarPassword() {
@@ -227,20 +388,31 @@ class PerfilActivity : AppCompatActivity() {
         val nueva = etPasswordNueva.text.toString()
         val confirmar = etPasswordConfirmar.text.toString()
 
-        if (actual.isEmpty() || nueva.isEmpty() || confirmar.isEmpty()) {
-            tvEstadoPerfil.text = "Completa los tres campos de contraseña."
+        if (
+            actual.isEmpty() ||
+            nueva.isEmpty() ||
+            confirmar.isEmpty()
+        ) {
+            mostrarEstado(
+                tvEstadoPassword,
+                "Completa los tres campos de contraseña."
+            )
             return
         }
 
         if (nueva.length < 8) {
-            tvEstadoPerfil.text =
+            mostrarEstado(
+                tvEstadoPassword,
                 "La nueva contraseña debe tener al menos 8 caracteres."
+            )
             return
         }
 
         if (nueva != confirmar) {
-            tvEstadoPerfil.text =
+            mostrarEstado(
+                tvEstadoPassword,
                 "Las nuevas contraseñas no coinciden."
+            )
             return
         }
 
@@ -250,26 +422,47 @@ class PerfilActivity : AppCompatActivity() {
             addProperty("passwordConfirmar", confirmar)
         }
 
-        tvEstadoPerfil.text = "Actualizando contraseña..."
+        btnCambiarPassword.isEnabled = false
 
-        RetrofitClient.api.cambiarPassword(idUsuario, datos)
-            .enqueue(object : Callback<JsonObject> {
+        mostrarEstado(
+            tvEstadoPassword,
+            "Actualizando contraseña..."
+        )
+
+        llamadaPassword = RetrofitClient.api.cambiarPassword(
+            idUsuario,
+            datos
+        )
+
+        llamadaPassword?.enqueue(
+            object : Callback<JsonObject> {
 
                 override fun onResponse(
                     call: Call<JsonObject>,
                     response: Response<JsonObject>
                 ) {
+                    if (
+                        isFinishing ||
+                        isDestroyed ||
+                        call.isCanceled
+                    ) return
+
+                    btnCambiarPassword.isEnabled = true
+
                     if (response.isSuccessful) {
                         etPasswordActual.text.clear()
                         etPasswordNueva.text.clear()
                         etPasswordConfirmar.text.clear()
 
-                        tvEstadoPerfil.text =
+                        mostrarEstado(
+                            tvEstadoPassword,
                             "Contraseña actualizada correctamente."
+                        )
                     } else {
-                        tvEstadoPerfil.text =
-                            "No se pudo cambiar la contraseña (${response.code()}). " +
-                                    mensajeError(response)
+                        mostrarEstado(
+                            tvEstadoPassword,
+                            "No se pudo cambiar la contraseña (${response.code()}). ${mensajeError(response)}"
+                        )
                     }
                 }
 
@@ -277,60 +470,98 @@ class PerfilActivity : AppCompatActivity() {
                     call: Call<JsonObject>,
                     t: Throwable
                 ) {
-                    tvEstadoPerfil.text =
-                        "Error de conexión: ${t.localizedMessage}"
+                    if (
+                        isFinishing ||
+                        isDestroyed ||
+                        call.isCanceled
+                    ) return
+
+                    btnCambiarPassword.isEnabled = true
+
+                    mostrarEstado(
+                        tvEstadoPassword,
+                        "No se pudo conectar con el servidor."
+                    )
                 }
-            })
+            }
+        )
     }
 
     private fun subirFoto(uri: Uri) {
+        var archivo: File? = null
+
         try {
-            val archivo = copiarUriAArchivo(uri)
-            val requestBody = archivo.asRequestBody(
-                (contentResolver.getType(uri)
-                    ?: "image/jpeg").toMediaTypeOrNull()
+            archivo = copiarUriAArchivo(uri)
+
+            val tipo = contentResolver.getType(uri)
+                ?: "image/jpeg"
+
+            val cuerpo = archivo.asRequestBody(
+                tipo.toMediaTypeOrNull()
             )
 
             val parte = MultipartBody.Part.createFormData(
                 "foto",
                 archivo.name,
-                requestBody
+                cuerpo
             )
 
-            tvEstadoPerfil.text = "Subiendo foto..."
+            val archivoTemporal = archivo
 
-            RetrofitClient.api.subirFotoPerfil(idUsuario, parte)
-                .enqueue(object : Callback<JsonObject> {
+            btnCambiarFoto.isEnabled = false
+
+            mostrarEstado(
+                tvEstadoFoto,
+                "Subiendo foto..."
+            )
+
+            llamadaFoto = RetrofitClient.api.subirFotoPerfil(
+                idUsuario,
+                parte
+            )
+
+            llamadaFoto?.enqueue(
+                object : Callback<JsonObject> {
 
                     override fun onResponse(
                         call: Call<JsonObject>,
                         response: Response<JsonObject>
                     ) {
-                        archivo.delete()
+                        archivoTemporal.delete()
+
+                        if (
+                            isFinishing ||
+                            isDestroyed ||
+                            call.isCanceled
+                        ) return
+
+                        btnCambiarFoto.isEnabled = true
 
                         if (response.isSuccessful) {
-                            val datos = response.body()
-                            val foto = datos?.get("fotoUrl")
+                            val foto = response.body()?.let {
+                                obtenerTexto(it, "fotoUrl")
+                            }.orEmpty()
 
-                            if (foto != null && !foto.isJsonNull) {
+                            if (foto.isNotBlank()) {
                                 getSharedPreferences(
-                                    "BarberApp", MODE_PRIVATE
+                                    "BarberApp",
+                                    MODE_PRIVATE
                                 ).edit()
-                                    .putString("fotoUrl", foto.asString)
+                                    .putString("fotoUrl", foto)
                                     .apply()
 
-                                Glide.with(this@PerfilActivity)
-                                    .load(foto.asString)
-                                    .circleCrop()
-                                    .into(imgFotoPerfil)
+                                mostrarFoto(foto)
                             }
 
-                            tvEstadoPerfil.text =
+                            mostrarEstado(
+                                tvEstadoFoto,
                                 "Foto actualizada correctamente."
+                            )
                         } else {
-                            tvEstadoPerfil.text =
-                                "No se pudo subir la foto (${response.code()}). " +
-                                        mensajeError(response)
+                            mostrarEstado(
+                                tvEstadoFoto,
+                                "No se pudo subir la foto (${response.code()}). ${mensajeError(response)}"
+                            )
                         }
                     }
 
@@ -338,16 +569,51 @@ class PerfilActivity : AppCompatActivity() {
                         call: Call<JsonObject>,
                         t: Throwable
                     ) {
-                        archivo.delete()
-                        tvEstadoPerfil.text =
-                            "Error al subir la foto: ${t.localizedMessage}"
-                    }
-                })
+                        archivoTemporal.delete()
 
-        } catch (e: Exception) {
-            tvEstadoPerfil.text =
+                        if (
+                            isFinishing ||
+                            isDestroyed ||
+                            call.isCanceled
+                        ) return
+
+                        btnCambiarFoto.isEnabled = true
+
+                        mostrarEstado(
+                            tvEstadoFoto,
+                            "No se pudo subir la fotografía."
+                        )
+                    }
+                }
+            )
+        } catch (_: Exception) {
+            archivo?.delete()
+            btnCambiarFoto.isEnabled = true
+
+            mostrarEstado(
+                tvEstadoFoto,
                 "No se pudo leer la imagen seleccionada."
+            )
         }
+    }
+
+    private fun mostrarFoto(url: String) {
+        val urlFinal =
+            if (
+                url.startsWith("http://") ||
+                url.startsWith("https://")
+            ) {
+                url
+            } else {
+                "https://storage.googleapis.com/barberapp-storage-2026/usuarios/$url"
+            }
+
+        Glide.with(this)
+            .load(urlFinal)
+            .circleCrop()
+            .placeholder(R.drawable.logo_barberapp)
+            .error(R.drawable.logo_barberapp)
+            .into(imgFotoPerfil)
     }
 
     private fun copiarUriAArchivo(uri: Uri): File {
@@ -360,12 +626,18 @@ class PerfilActivity : AppCompatActivity() {
         )?.use { cursor ->
             if (cursor.moveToFirst()) {
                 cursor.getString(0)
-            } else null
+            } else {
+                null
+            }
         } ?: "foto_perfil.jpg"
 
-        val extension = nombre.substringAfterLast(
-            '.', "jpg"
-        ).replace(Regex("[^A-Za-z0-9]"), "")
+        val extension = nombre
+            .substringAfterLast('.', "jpg")
+            .replace(
+                Regex("[^A-Za-z0-9]"),
+                ""
+            )
+            .ifBlank { "jpg" }
 
         val archivo = File(
             cacheDir,
@@ -373,7 +645,9 @@ class PerfilActivity : AppCompatActivity() {
         )
 
         contentResolver.openInputStream(uri).use { entrada ->
-            requireNotNull(entrada) { "No se pudo abrir la imagen." }
+            requireNotNull(entrada) {
+                "No se pudo abrir la imagen."
+            }
 
             FileOutputStream(archivo).use { salida ->
                 entrada.copyTo(salida)
@@ -383,16 +657,62 @@ class PerfilActivity : AppCompatActivity() {
         return archivo
     }
 
+    private fun obtenerTexto(
+        datos: JsonObject,
+        clave: String
+    ): String {
+        val valor = datos.get(clave)
+
+        return if (
+            valor == null ||
+            valor.isJsonNull
+        ) {
+            ""
+        } else {
+            try {
+                valor.asString
+            } catch (_: Exception) {
+                ""
+            }
+        }
+    }
+
     private fun mensajeError(
         response: Response<JsonObject>
     ): String {
         return try {
-            response.errorBody()?.string()
-                ?.let { org.json.JSONObject(it).optString("mensaje") }
+            response.errorBody()
+                ?.string()
+                ?.let {
+                    org.json.JSONObject(it)
+                        .optString("mensaje")
+                }
                 ?.takeIf { it.isNotBlank() }
                 ?: "Revisa los datos e inténtalo nuevamente."
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             "Revisa los datos e inténtalo nuevamente."
         }
+    }
+
+    private fun mostrarEstado(
+        vista: TextView,
+        mensaje: String
+    ) {
+        vista.text = mensaje
+        vista.visibility = View.VISIBLE
+    }
+
+    private fun dp(valor: Int): Int {
+        return (
+                valor * resources.displayMetrics.density
+                ).toInt()
+    }
+
+    override fun onDestroy() {
+        llamadaPerfil?.cancel()
+        llamadaGuardar?.cancel()
+        llamadaPassword?.cancel()
+        llamadaFoto?.cancel()
+        super.onDestroy()
     }
 }
